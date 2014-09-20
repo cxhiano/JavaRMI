@@ -24,14 +24,10 @@ public class Registry {
 	 * @throws IOException
 	 */
 	public RemoteObjectReference lookup(String serviceName) throws IOException {
-		// open socket.
-		// it assumes registry is already located by locate registry.
-		// you should usually do try-catch here (and later).
-		Socket soc = new Socket(this.host, this.port);
-		// get TCP streams and wrap them.
+		Socket socket = new Socket(this.host, this.port);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
-				soc.getInputStream()));
-		PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+				socket.getInputStream()));
+		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
 		System.out.println("stream made.");
 
@@ -43,7 +39,7 @@ public class Registry {
 
 		RemoteObjectReference ref = null;
 
-		soc.close();
+		socket.close();
 
 		return ref;
 	}
