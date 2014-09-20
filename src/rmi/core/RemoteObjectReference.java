@@ -1,17 +1,13 @@
 package rmi.core;
 
 public class RemoteObjectReference {
-	String host;
-	int port;
-	String key;
-	String stubName;
+	public String host;
+	public int port;
+	public String key;
+	public String stubName;
 
-	public RemoteObjectReference(String host, int port, String key,
-			String stubName) {
-		this.host = host;
-		this.port = port;
-		this.key = key;
-		this.stubName = stubName;
+	public RemoteObjectReference() {
+		
 	}
 
 	/**

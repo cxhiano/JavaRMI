@@ -1,18 +1,68 @@
 package rmi.registry;
 
 import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import rmi.core.RemoteObjectReference;
+import rmi.message.ListRequest;
+import rmi.message.ListResponse;
+import rmi.message.LookupRequest;
+import rmi.message.LookupResponse;
+import rmi.message.RebindRequest;
+import rmi.message.RebindResponse;
+import rmi.message.Request;
+import rmi.message.Response;
 
 public class RegistryServer {
+
+	private static Map<String, RemoteObjectReference> map = new HashMap<String, RemoteObjectReference>();
+
+	private static Response handle(Socket socket, Request object) {
+		Response r;
+		if (object instanceof LookupRequest) {
+			LookupRequest req = (LookupRequest) object;
+			LookupResponse resp = new LookupResponse();
+			resp.ref = map.get(req.key);
+			resp.ok = true;
+			r = resp;
+		} else if (object instanceof ListRequest) {
+			ListResponse resp = new ListResponse();
+			resp.keys = new ArrayList<String>(map.keySet());
+			resp.ok = true;
+			r = resp;
+		} else if (object instanceof RebindRequest) {
+			RebindRequest req = (RebindRequest) object;
+			RebindResponse resp = new RebindResponse();
+			RemoteObjectReference ref = new RemoteObjectReference();
+			ref.host = socket.getInetAddress().getHostAddress();
+			ref.port = socket.getPort();
+			ref.key = req.key;
+			ref.stubName = req.stubName;
+			resp.ok = true;
+			r = resp;
+			map.put(req.key, ref);
+		} else {
+			r = new Response();
+			r.ok = false;
+		}
+		return r;
+	}
+
 	private static void loop(ServerSocket listener) {
 		Socket socket = null;
 		try {
 			socket = listener.accept();
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-			Object object = ois.readObject();
-			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			ObjectInputStream ois = new ObjectInputStream(
+					socket.getInputStream());
+			Request msg = (Request)ois.readObject();
+			ObjectOutputStream oos = new ObjectOutputStream(
+					socket.getOutputStream());
+			oos.writeObject(handle(socket, msg));
 		} catch (Exception e) {
 		} finally {
 			if (socket != null) {

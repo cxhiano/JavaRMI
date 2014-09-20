@@ -1,7 +1,7 @@
 package rmi.message;
 
 
-public class RebindResponse extends Message {
+public class RebindResponse extends Response {
 
 	/**
 	 * 

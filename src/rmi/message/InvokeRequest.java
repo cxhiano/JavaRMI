@@ -1,7 +1,7 @@
 package rmi.message;
 
 
-public class InvokeRequest extends Message {
+public class InvokeRequest extends Request {
 
 	/**
 	 * 
