@@ -1,13 +1,12 @@
 package rmi.message;
 
-import org.json.JSONString;
 
-public class LookupRequest implements JSONString {
+public class LookupRequest extends Message {
 
-	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6700342405839325673L;
+
 
 }

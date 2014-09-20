@@ -1,13 +1,9 @@
 package rmi.message;
 
-import org.json.JSONString;
+public class RebindRequest extends Message {
 
-public class RebindRequest implements JSONString {
-
-	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -836045415455500522L;
 }

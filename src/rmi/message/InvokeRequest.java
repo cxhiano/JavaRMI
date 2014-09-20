@@ -1,13 +1,11 @@
 package rmi.message;
 
-import org.json.JSONString;
 
-public class InvokeRequest implements JSONString {
+public class InvokeRequest extends Message {
 
-	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3699709985895743657L;
 
 }
