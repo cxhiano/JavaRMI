@@ -4,11 +4,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import rmi.core.RemoteObjectReference;
 import rmi.message.ListRequest;
 import rmi.message.ListResponse;
 import rmi.message.LookupRequest;
@@ -20,14 +20,14 @@ import rmi.message.Response;
 
 public class RegistryServer {
 
-	private static Map<String, RemoteObjectReference> map = new HashMap<String, RemoteObjectReference>();
+	private static Map<String, Remote> map = new HashMap<String, Remote>();
 
 	private static Response handle(Socket socket, Request object) {
 		Response r;
 		if (object instanceof LookupRequest) {
 			LookupRequest req = (LookupRequest) object;
 			LookupResponse resp = new LookupResponse();
-			resp.ref = map.get(req.key);
+			resp.stub = map.get(req.key);
 			resp.ok = true;
 			r = resp;
 		} else if (object instanceof ListRequest) {
@@ -38,14 +38,9 @@ public class RegistryServer {
 		} else if (object instanceof RebindRequest) {
 			RebindRequest req = (RebindRequest) object;
 			RebindResponse resp = new RebindResponse();
-			RemoteObjectReference ref = new RemoteObjectReference();
-			ref.host = socket.getInetAddress().getHostAddress();
-			ref.port = socket.getPort();
-			ref.key = req.key;
-			ref.stubName = req.stubName;
 			resp.ok = true;
 			r = resp;
-			map.put(req.key, ref);
+			map.put(req.key, req.stub);
 		} else {
 			r = new Response();
 			r.ok = false;
@@ -59,17 +54,17 @@ public class RegistryServer {
 			socket = listener.accept();
 			ObjectInputStream ois = new ObjectInputStream(
 					socket.getInputStream());
-			Request msg = (Request)ois.readObject();
+			Request msg = (Request) ois.readObject();
 			ObjectOutputStream oos = new ObjectOutputStream(
 					socket.getOutputStream());
 			oos.writeObject(handle(socket, msg));
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (socket != null) {
 				try {
 					socket.close();
 				} catch (Exception e) {
-
 				}
 			}
 		}
@@ -83,6 +78,7 @@ public class RegistryServer {
 				loop(listener);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (listener != null) {
 				try {

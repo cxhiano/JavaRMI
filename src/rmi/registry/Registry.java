@@ -1,12 +1,15 @@
 package rmi.registry;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import rmi.core.RemoteObjectReference;
+import rmi.core.Remote;
+import rmi.core.RemoteException;
+import rmi.message.LookupRequest;
+import rmi.message.LookupResponse;
+import rmi.message.RebindRequest;
+import rmi.message.RebindResponse;
 
 public class Registry {
 	public String host;
@@ -19,57 +22,63 @@ public class Registry {
 
 	/**
 	 * 
-	 * @param serviceName
+	 * @param key
 	 * @return
-	 * @throws IOException
 	 */
-	public RemoteObjectReference lookup(String serviceName) throws IOException {
-		Socket socket = new Socket(this.host, this.port);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				socket.getInputStream()));
-		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-		System.out.println("stream made.");
-
-		// it is locate request, with a service name.
-		out.println("lookup");
-		out.println(serviceName);
-
-		System.out.println("command and service name sent.");
-
-		RemoteObjectReference ref = null;
-
-		socket.close();
-
-		return ref;
+	public Remote lookup(String key) {
+		Socket socket = null;
+		try {
+			socket = new Socket(host, port);
+			ObjectInputStream ois = new ObjectInputStream(
+					socket.getInputStream());
+			ObjectOutputStream oos = new ObjectOutputStream(
+					socket.getOutputStream());
+			LookupRequest req = new LookupRequest(key);
+			oos.writeObject(req);
+			LookupResponse resp = (LookupResponse) ois.readObject();
+			if (!resp.ok)
+				throw new RemoteException("Bad Response.");
+			return resp.stub;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		return null;
 	}
-
+	
 	/**
 	 * 
-	 * @param serviceName
+	 * @param key
 	 * @param ref
-	 * @throws IOException
 	 */
-	public void rebind(String serviceName, RemoteObjectReference ref)
-			throws IOException {
-		Socket soc = new Socket(this.host, this.port);
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				soc.getInputStream()));
-		PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-
-		// it is a rebind request, with a service name and ROR.
-		// out.println("rebind");
-		// out.println(serviceName);
-		// out.println(ror.IP_adr);
-		// out.println(ror.Port);
-		// out.println(ror.Obj_Key);
-		// out.println(ror.Remote_Interface_Name);
-
-		// it also gets an ack, but this is not used.
-		// String ack = in.readLine();
-
-		// close the socket.
-		soc.close();
+	public void rebind(String key, Remote stub) {
+		Socket socket = null;
+		try {
+			socket = new Socket(host, port);
+			ObjectInputStream ois = new ObjectInputStream(
+					socket.getInputStream());
+			ObjectOutputStream oos = new ObjectOutputStream(
+					socket.getOutputStream());
+			RebindRequest req = new RebindRequest(key, stub);
+			oos.writeObject(req);
+			RebindResponse resp = (RebindResponse) ois.readObject();
+			if (!resp.ok)
+				throw new RemoteException("Bad Response.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 }

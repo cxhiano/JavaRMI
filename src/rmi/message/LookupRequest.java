@@ -10,5 +10,11 @@ public class LookupRequest extends Request {
 
 
 	public String key;
+	
+	public LookupRequest() {
+	}
 
+	public LookupRequest(String key) {
+		this.key = key;
+	}
 }
