@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
 
-public class InvokeRequest implements Serializable {
+public class InvokeRequest extends Request {
     public String className;
     public String methodName;
     public List<Object> args;
@@ -18,4 +18,6 @@ public class InvokeRequest implements Serializable {
     public void addArg(Object arg) {
         args.add(arg);
     }
+
+    private static final long serialVersionUID = 3699709985895743657L;
 }
