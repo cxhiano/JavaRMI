@@ -1,13 +1,21 @@
 package rmi.message;
 
-import org.json.JSONString;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.Serializable;
 
-public class InvokeRequest implements JSONString {
+public class InvokeRequest implements Serializable {
+    public String className;
+    public String methodName;
+    public List<Object> args;
 
-	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public InvokeRequest(String className, String methodName) {
+        this.className = className;
+        this.methodName = methodName;
+        args = new ArrayList<Object>();
+    }
 
+    public void addArg(Object arg) {
+        args.add(arg);
+    }
 }
