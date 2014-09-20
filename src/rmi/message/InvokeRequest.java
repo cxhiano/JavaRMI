@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 public class InvokeRequest extends Request {
-    public String className;
     public String methodName;
     public List<Object> args;
 
-    public InvokeRequest(String className, String methodName) {
-        this.className = className;
+    public InvokeRequest(String methodName) {
         this.methodName = methodName;
         args = new ArrayList<Object>();
     }
