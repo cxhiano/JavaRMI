@@ -5,12 +5,10 @@ import java.lang.reflect.Proxy;
 public class Unicast {
     private static Remote generateStub(Remote obj, int port) {
         StubHandler handler = new StubHandler("localhost", port);
-
         Remote proxy = (Remote) Proxy.newProxyInstance(
                             Remote.class.getClassLoader(),
                             obj.getClass().getInterfaces(),
                             handler);
-
         return proxy;
     }
 
