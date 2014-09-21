@@ -9,7 +9,7 @@ import rmi.message.InvokeResponse;
 
 public class RemoteInvocationHandler implements Serializable, InvocationHandler {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6842830036262560740L;
 	private RemoteObjectRef ref;

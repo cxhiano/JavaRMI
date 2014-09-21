@@ -9,4 +9,8 @@ public class HelloImp implements Hello {
     public void sayHello() {
         System.out.println("Hello");
     }
+
+    public int sum(int a, int b) {
+        return a + b;
+    }
 }
