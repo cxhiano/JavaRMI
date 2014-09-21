@@ -11,22 +11,26 @@ import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 
 public class RemoteObjectServer extends Thread {
-	private Remote stub = null;
+	private Remote objRef = null;
 	private int port;
 
-	public RemoteObjectServer(Remote stub, int port) {
-		this.stub = stub;
+	public RemoteObjectServer(Remote objRef, int port) {
+		this.objRef = objRef;
 		this.port = port;
 	}
 
 	private Object handleRequest(InvokeRequest req) {
 		try {
-			Class<? extends Remote> cls = stub.getClass();
+			Class<? extends Remote> cls = objRef.getClass();
 			Class<?>[] args = new Class<?>[req.args.size()];
 			for (int i = 0; i < req.args.size(); ++i)
 				args[i] = req.args.get(i).getClass();
 			Method method = cls.getMethod(req.methodName, args);
-			return method.invoke(this.stub, req.args.toArray());
+			if (req.args.size() == 0) {
+				return method.invoke(this.objRef);
+			} else {
+				return method.invoke(this.objRef, req.args.toArray());
+			}
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
