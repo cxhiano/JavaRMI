@@ -9,7 +9,7 @@ import rmi.message.InvokeResponse;
 
 public class StubHandler implements Serializable, InvocationHandler {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6842830036262560740L;
 	private String host;
@@ -24,6 +24,10 @@ public class StubHandler implements Serializable, InvocationHandler {
 			throws RemoteException {
 		InvokeResponse response = (InvokeResponse) SocketHandler.request(host,
 				port, new InvokeRequest(method.getName(), args));
+
+		if (response == null)
+			throw new RemoteException("Bad Response");
+
 		return method.getReturnType().cast(response.result);
 	}
 }

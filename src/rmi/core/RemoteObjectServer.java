@@ -39,7 +39,7 @@ public class RemoteObjectServer extends Thread {
 						args[i] = req.args[i].getClass();
 					Method method = cls.getMethod(req.methodName, args);
 					resp.result = method.invoke(RemoteObjectServer.this.objRef,
-							req.args);
+									req.args);
 				}
 				return resp;
 			} catch (NoSuchMethodException e) {

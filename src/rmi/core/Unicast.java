@@ -4,12 +4,12 @@ import java.lang.reflect.Proxy;
 
 /**
  * Unicast
- * 
+ *
  * @author Chao
  *
  */
 public class Unicast {
-    private static Remote generateStub(Remote obj, int port) {
+    public static Remote generateStub(Remote obj, int port) {
         StubHandler handler = new StubHandler("localhost", port);
         Remote proxy = (Remote) Proxy.newProxyInstance(
                             Remote.class.getClassLoader(),
@@ -19,9 +19,9 @@ public class Unicast {
     }
 
     /**
-     * Export a Remote obj to a given port, this will start a 
+     * Export a Remote obj to a given port, this will start a
      * remote server
-     * 
+     *
      * @param obj
      * @param port
      * @return stub for obj
