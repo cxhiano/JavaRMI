@@ -1,6 +1,8 @@
 package test;
 
-public class HelloImp implements Hello {
+import java.io.Serializable;
+
+public class HelloImp implements Hello, Serializable {
     public String sayHello(Integer a, Character c) {
         return String.format("Hello %d %c\n", a, c);
     }

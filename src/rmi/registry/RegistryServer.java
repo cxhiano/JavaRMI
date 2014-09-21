@@ -79,7 +79,7 @@ public class RegistryServer {
 	public static void main(String[] args) {
 		ServerSocket listener = null;
 		try {
-			listener = new ServerSocket(Integer.parseInt(args[0]));
+			listener = new ServerSocket(3044);
 			while (true) {
 				loop(listener);
 			}
