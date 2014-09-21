@@ -9,7 +9,7 @@ public class Test {
     public static void main(String args[]) {
         try {
             SocketServer server = SocketServer.getServer(12345);
-            SocketRequestHandler handler = new SocketRequestHandler("Chao Ma") {
+            SocketRequestHandler handler = new SocketRequestHandler("hehe") {
                 public Response handle(Request req) {
                     System.out.println(req);
                     return new Response();

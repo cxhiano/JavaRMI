@@ -13,11 +13,7 @@ public class Request extends Message {
 	 */
 	private static final long serialVersionUID = 8242580035359822066L;
 
-    protected String token;
-
-    public Request(String token) {
-        this.token = token;
-    }
+    protected String token = null;
 
     public String getToken() {
         return token;
