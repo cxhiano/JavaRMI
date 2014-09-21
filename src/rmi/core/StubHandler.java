@@ -4,17 +4,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.Socket;
-import java.lang.reflect.Proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.io.Serializable;
+import java.net.Socket;
 
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 
 public class StubHandler implements Serializable, InvocationHandler {
-    private Socket sock;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6842830036262560740L;
+	private Socket sock;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private String host;
