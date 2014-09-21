@@ -12,22 +12,24 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
 	 *
 	 */
 	private static final long serialVersionUID = 6842830036262560740L;
-	private String host;
-	private int port;
+	private RemoteObjectRef ref;
 
-	public RemoteInvocationHandler(String host, int port) {
-		this.host = host;
-		this.port = port;
+	public RemoteInvocationHandler(RemoteObjectRef ref) {
+		this.ref = ref;
+	}
+
+	public void setRef(RemoteObjectRef ref) {
+		this.ref = ref;
+	}
+
+	public RemoteObjectRef getRef() {
+		return this.ref;
 	}
 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws RemoteException {
-		InvokeResponse response = (InvokeResponse) SocketHandler.request(host,
-				port, new InvokeRequest(method.getName(), args));
-
-		if (response == null)
-			throw new RemoteException("Bad Response");
-
+		InvokeResponse response = (InvokeResponse) SocketHandler.request(
+				ref.host, ref.port, new InvokeRequest(method.getName(), args));
 		return method.getReturnType().cast(response.result);
 	}
 }
