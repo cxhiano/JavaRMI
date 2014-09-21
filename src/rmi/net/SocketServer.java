@@ -21,7 +21,7 @@ public class SocketServer extends Thread {
     private ServerSocket listener;
     private Map<String, SocketRequestHandler> handlers;
 
-    public static SocketServer getServer(int port) throws IOException {
+    public synchronized static SocketServer getServer(int port) throws IOException {
         SocketServer server = serverSockets.get(port);
 
         if (server == null) {
