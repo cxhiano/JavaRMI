@@ -1,24 +1,30 @@
-package rmi.utils;
+package rmi.core;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
+import rmi.core.RemoteException;
 import rmi.message.InvokeRequest;
+import rmi.message.InvokeResponse;
 
-public abstract class BaseStub {
+public abstract class BaseStub implements Serializable {
     protected Socket sock;
     protected ObjectInputStream in;
     protected ObjectOutputStream out;
 
-    protected Object invoke(InvokeRequest req) {
-        Object ret;
+    protected Object invoke(InvokeRequest req) throws RemoteException {
         try {
             out.writeObject(req);
             out.flush();
-            ret = in.readObject();
+            InvokeResponse ret = (InvokeResponse)in.readObject();
             sock.close();
-            return ret;
+
+            if (ret == null || !ret.ok)
+                throw new RemoteException("Bad Response.");
+
+            return ret.result;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -36,10 +42,4 @@ public abstract class BaseStub {
             e.printStackTrace();
         }
     }
-
-    protected String getCurrentMethodName() {
-        StackTraceElement elements[] = (new Throwable()).getStackTrace();
-        return elements[1].getMethodName();
-    }
-
 }
