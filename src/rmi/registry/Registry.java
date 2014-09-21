@@ -3,13 +3,13 @@ package rmi.registry;
 import java.util.List;
 
 import rmi.core.Remote;
-import rmi.core.SocketHandler;
 import rmi.message.ListRequest;
 import rmi.message.ListResponse;
 import rmi.message.LookupRequest;
 import rmi.message.LookupResponse;
 import rmi.message.RebindRequest;
 import rmi.message.Response;
+import rmi.util.SocketHelper;
 
 public class Registry {
 	public static final int DEFAULT_PORT = 15640;
@@ -28,8 +28,8 @@ public class Registry {
 	 * @param key
 	 * @return
 	 */
-	public Remote lookup(String key) throws StubNotFoundException {
-		LookupResponse resp = (LookupResponse) SocketHandler.request(host,
+	public Remote lookup(String key) {
+		LookupResponse resp = (LookupResponse) SocketHelper.request(host,
 								port, new LookupRequest(key));
 
 		Response.throwIfInvalid(resp);
@@ -42,7 +42,7 @@ public class Registry {
 	 * @param ref
 	 */
 	public void rebind(String key, Remote stub) {
-		SocketHandler.request(host,
+		SocketHelper.request(host,
 				port, new RebindRequest(key, stub));
 	}
 
@@ -51,7 +51,7 @@ public class Registry {
 	 * @return
 	 */
 	public List<String> list() {
-		ListResponse resp = (ListResponse) SocketHandler.request(host,
+		ListResponse resp = (ListResponse) SocketHelper.request(host,
 				port, new ListRequest());
 		Response.throwIfInvalid(resp);
 		return resp.keys;

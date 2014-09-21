@@ -3,7 +3,6 @@ package test;
 import rmi.core.RemoteException;
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
-import rmi.registry.exception.*;
 
 public class Client {
     public static void main(String args[]) {
@@ -24,9 +23,7 @@ public class Client {
 
             Hello h2 = (Hello) registry.lookup("Hello2");
             System.out.println(h.sayHello(h2));
-        } catch (StubNotFoundException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
+        }  catch (RemoteException e) {
             e.printStackTrace();
         }
 

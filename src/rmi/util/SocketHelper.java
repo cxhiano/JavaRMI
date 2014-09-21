@@ -1,4 +1,4 @@
-package rmi.core;
+package rmi.util;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,7 +16,7 @@ import rmi.message.Response;
  * @author Chao
  *
  */
-public abstract class SocketHandler {
+public abstract class SocketHelper {
 
 	public abstract Response handle(Request request);
 
@@ -24,16 +24,15 @@ public abstract class SocketHandler {
 	 * Run a server at given port number
 	 *
 	 * @param port
-	 * @param handler
+	 * @param helper
 	 * @throws IOException
 	 */
-	public static void serve(int port, SocketHandler handler)
-			throws IOException {
+	public static void serve(int port, SocketHelper helper) throws IOException {
 		ServerSocket listener = null;
 		try {
 			listener = new ServerSocket(port);
 			while (true) {
-				serve(listener, handler);
+				serve(listener, helper);
 			}
 		} finally {
 			if (listener != null) {
@@ -49,9 +48,9 @@ public abstract class SocketHandler {
 	 * Loop function for server at given listener
 	 *
 	 * @param listener
-	 * @param handler
+	 * @param helper
 	 */
-	public static void serve(ServerSocket listener, SocketHandler handler) {
+	public static void serve(ServerSocket listener, SocketHelper helper) {
 		Socket socket = null;
 		try {
 			socket = listener.accept();
@@ -61,7 +60,7 @@ public abstract class SocketHandler {
 			ObjectInputStream in = new ObjectInputStream(
 					socket.getInputStream());
 			Request req = (Request) in.readObject();
-			out.writeObject(handler.handle(req));
+			out.writeObject( helper.handle(req));
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
