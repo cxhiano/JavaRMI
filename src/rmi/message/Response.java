@@ -27,6 +27,6 @@ public class Response extends Message {
 	
 	public static void raiseIfInvalid(Response response) {
 		if (!valid(response))
-			throw new RemoteException("Cannot talk to registry.");
+			throw new RemoteException("Bad Response.");
 	}
 }
