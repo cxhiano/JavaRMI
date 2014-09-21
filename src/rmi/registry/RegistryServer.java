@@ -61,7 +61,7 @@ public class RegistryServer {
 		try {
 			SocketServer server = SocketServer.getServer(Registry.DEFAULT_PORT);
 			server.bindHandler(handler);
-			server.serve();
+			server.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -18,7 +18,7 @@ public class Test {
 
             server.bindHandler(handler);
 
-            server.serve();
+            server.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
