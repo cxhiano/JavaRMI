@@ -1,6 +1,6 @@
 package rmi.registry;
 
-import java.net.ServerSocket;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +57,7 @@ public class RegistryServer {
 		
 	};
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		SocketHandler.serve(Registry.DEFAULT_PORT, handler);
 	}
 }

@@ -9,19 +9,30 @@ import java.net.Socket;
 import rmi.message.Request;
 import rmi.message.Response;
 
+/**
+ * A wrapper class for servers to serve and for clients to send requests and get response.
+ * 
+ * @author Chao
+ *
+ */
 public abstract class SocketHandler {
 
 	public abstract Response handle(Request request);
 
-	public static void serve(int port, SocketHandler handler) {
+	/**
+	 * Run a server at given port number
+	 * 
+	 * @param port
+	 * @param handler
+	 * @throws IOException
+	 */
+	public static void serve(int port, SocketHandler handler) throws IOException {
 		ServerSocket listener = null;
 		try {
 			listener = new ServerSocket(port);
 			while (true) {
 				serve(listener, handler);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			if (listener != null) {
 				try {
@@ -32,6 +43,12 @@ public abstract class SocketHandler {
 		}
 	}
 
+	/**
+	 * Loop function for server at given listener
+	 * 
+	 * @param listener
+	 * @param handler
+	 */
 	public static void serve(ServerSocket listener, SocketHandler handler) {
 		Socket socket = null;
 		try {
@@ -55,6 +72,15 @@ public abstract class SocketHandler {
 		}
 	}
 
+	/**
+	 * 
+	 * Wrapper function for client to send a request at host:port
+	 * 
+	 * @param host
+	 * @param port
+	 * @param request
+	 * @return response object
+	 */
 	public static Response request(String host, int port, Request request) {
 		Socket sock = null;
 		try {
