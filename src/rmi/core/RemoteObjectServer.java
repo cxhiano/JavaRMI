@@ -10,6 +10,7 @@ import java.net.Socket;
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 
+<<<<<<< HEAD
 public class RemoteObjectServer extends Thread {
 	private Remote stub = null;
 	private int port;
