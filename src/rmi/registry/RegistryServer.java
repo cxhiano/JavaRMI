@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rmi.core.Remote;
-import rmi.core.SocketHandler;
 import rmi.message.AuthRequest;
 import rmi.message.AuthResponse;
 import rmi.message.ListRequest;
@@ -17,13 +16,14 @@ import rmi.message.RebindRequest;
 import rmi.message.RebindResponse;
 import rmi.message.Request;
 import rmi.message.Response;
+import rmi.util.SocketHelper;
 import rmi.registry.exception.*;
 
 public class RegistryServer {
 
 	private static Map<String, Remote> map = new HashMap<String, Remote>();
 
-	private static SocketHandler handler = new SocketHandler() {
+	private static SocketHelper helper = new SocketHelper() {
 
 		@Override
 		public Response handle(Request request) {
@@ -58,6 +58,6 @@ public class RegistryServer {
 	};
 
 	public static void main(String[] args) throws IOException {
-		SocketHandler.serve(Registry.DEFAULT_PORT, handler);
+		SocketHelper.serve(Registry.DEFAULT_PORT, helper);
 	}
 }
