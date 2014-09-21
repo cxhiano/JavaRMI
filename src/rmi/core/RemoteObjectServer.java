@@ -34,10 +34,7 @@ public class RemoteObjectServer extends Thread {
 				} else {
 
 					// 1 or more argument
-					Class<?>[] args = new Class<?>[req.args.length];
-					for (int i = 0; i < req.args.length; ++i)
-						args[i] = req.args[i].getClass();
-					Method method = cls.getMethod(req.methodName, args);
+					Method method = cls.getMethod(req.methodName, req.types);
 					resp.result = method.invoke(RemoteObjectServer.this.objRef,
 									req.args);
 				}

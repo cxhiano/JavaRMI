@@ -31,7 +31,7 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
 		InvokeResponse response = (InvokeResponse) SocketHandler.request(
 									ref.host, ref.port,
 									new InvokeRequest(method.getName(),
-										method.getGenericParameterTypes(), args));
+										method.getParameterTypes(), args));
 
 		return method.getReturnType().cast(response.result);
 	}
