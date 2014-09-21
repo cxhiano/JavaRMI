@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 
-public class StubHandler implements Serializable, InvocationHandler {
+public class RemoteInvocationHandler implements Serializable, InvocationHandler {
 	/**
 	 *
 	 */
@@ -15,7 +15,7 @@ public class StubHandler implements Serializable, InvocationHandler {
 	private String host;
 	private int port;
 
-	public StubHandler(String host, int port) {
+	public RemoteInvocationHandler(String host, int port) {
 		this.host = host;
 		this.port = port;
 	}
