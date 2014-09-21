@@ -25,6 +25,11 @@ public class HelloImp implements Hello {
         return a + b + 1000000;
     }
 
+    @Override
+    public int divide(int a, int b) {
+        return a / b;
+    }
+
 	@Override
 	public String sayHello(Hello hello) throws RemoteException {
 		return String.format("Hello %s ! My name is %s\n", hello.getName(), myName);

@@ -17,6 +17,7 @@ import rmi.message.RebindRequest;
 import rmi.message.RebindResponse;
 import rmi.message.Request;
 import rmi.message.Response;
+import rmi.registry.exception.*;
 
 public class RegistryServer {
 
@@ -27,34 +28,33 @@ public class RegistryServer {
 		@Override
 		public Response handle(Request request) {
 			Response r;
-			if (request instanceof LookupRequest) {
+			if (request instanceof LookupRequest) {	//Client ask for a stub
 				LookupRequest req = (LookupRequest) request;
 				LookupResponse resp = new LookupResponse();
 				resp.stub = map.get(req.key);
-				resp.ok = true;
+				if (resp.stub == null)
+					resp.e = new StubNotFoundException(
+								String.format("No stub for %s", req.key));
 				r = resp;
-			} else if (request instanceof ListRequest) {
+			} else if (request instanceof ListRequest) { //List all stubs
 				ListResponse resp = new ListResponse();
 				resp.keys = new ArrayList<String>(map.keySet());
-				resp.ok = true;
 				r = resp;
 			} else if (request instanceof RebindRequest) {
 				RebindRequest req = (RebindRequest) request;
 				RebindResponse resp = new RebindResponse();
-				resp.ok = true;
 				r = resp;
 				map.put(req.key, req.stub);
 			} else if (request instanceof AuthRequest) {
 				AuthResponse resp = new AuthResponse();
-				resp.ok = true;
 				r = resp;
 			} else {
 				r = new Response();
-				r.ok = false;
+				r.e = new UnknownRequestException("Unknown Request");
 			}
 			return r;
 		}
-		
+
 	};
 
 	public static void main(String[] args) throws IOException {

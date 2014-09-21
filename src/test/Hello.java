@@ -10,6 +10,8 @@ public interface Hello extends Remote {
 
     public Integer sum(Integer a, Integer b) throws RemoteException;
 
+    public int divide(int a, int b) throws RemoteException;
+
     public String sayHello(Hello hello) throws RemoteException;
 
     public String getName() throws RemoteException;

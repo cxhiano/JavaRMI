@@ -22,10 +22,11 @@ public class RemoteObjectServer extends Thread {
 	private SocketHandler handler = new SocketHandler() {
 		@Override
 		public Response handle(Request request) {
+			InvokeResponse resp = new InvokeResponse();
+
 			try {
 				InvokeRequest req = (InvokeRequest) request;
-				InvokeResponse resp = new InvokeResponse();
-				resp.ok = true;
+
 				Class<? extends Remote> cls = objRef.getClass();
 
 				// No argument
@@ -43,12 +44,15 @@ public class RemoteObjectServer extends Thread {
 				return resp;
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
+				resp.e = new RemoteException(e.toString());
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
+				resp.e = new RemoteException(e.toString());
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
+				resp.e = new RemoteException(e.toString());
 			}
-			return new Response();
+			return resp;
 		}
 	};
 

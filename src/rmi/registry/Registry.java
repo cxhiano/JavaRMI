@@ -10,10 +10,12 @@ import rmi.message.LookupRequest;
 import rmi.message.LookupResponse;
 import rmi.message.RebindRequest;
 
+import rmi.registry.exception.*;
+
 public class Registry {
 	public static final int DEFAULT_PORT = 15640;
 	public static final String DEFAULT_HOST = "localhost";
-	
+
 	public String host;
 	public int port;
 
@@ -23,20 +25,21 @@ public class Registry {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param key
 	 * @return
 	 */
-	public Remote lookup(String key) {
+	public Remote lookup(String key) throws StubNotFoundException {
 		LookupResponse resp = (LookupResponse) SocketHandler.request(host,
-				port, new LookupRequest(key));
-		if (resp != null)
-			return resp.stub;
-		return null;
+								port, new LookupRequest(key));
+
+		if (!LookupResponse.valid(resp))
+			throw resp.e;
+		return resp.stub;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param key
 	 * @param ref
 	 */
@@ -44,9 +47,9 @@ public class Registry {
 		SocketHandler.request(host,
 				port, new RebindRequest(key, stub));
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> list() {

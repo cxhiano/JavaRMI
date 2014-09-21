@@ -11,7 +11,7 @@ import rmi.message.Response;
 
 /**
  * A wrapper class for servers to serve and for clients to send requests and get response.
- * 
+ *
  * @author Chao
  *
  */
@@ -21,7 +21,7 @@ public abstract class SocketHandler {
 
 	/**
 	 * Run a server at given port number
-	 * 
+	 *
 	 * @param port
 	 * @param handler
 	 * @throws IOException
@@ -45,7 +45,7 @@ public abstract class SocketHandler {
 
 	/**
 	 * Loop function for server at given listener
-	 * 
+	 *
 	 * @param listener
 	 * @param handler
 	 */
@@ -73,9 +73,9 @@ public abstract class SocketHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * Wrapper function for client to send a request at host:port
-	 * 
+	 *
 	 * @param host
 	 * @param port
 	 * @param request
@@ -83,15 +83,19 @@ public abstract class SocketHandler {
 	 */
 	public static Response request(String host, int port, Request request) {
 		Socket sock = null;
+
 		try {
 			sock = new Socket(host, port);
+
 			ObjectOutputStream out = new ObjectOutputStream(
-					sock.getOutputStream());
+										sock.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
+
 			out.writeObject(request);
 			out.flush();
+
 			Response response = (Response) in.readObject();
-			Response.raiseIfInvalid(response);
+
 			return response;
 		} catch (IOException e) {
 			e.printStackTrace();
