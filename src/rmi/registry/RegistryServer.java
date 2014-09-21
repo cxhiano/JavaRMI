@@ -4,11 +4,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import rmi.core.Remote;
 import rmi.message.ListRequest;
 import rmi.message.ListResponse;
 import rmi.message.LookupRequest;
@@ -52,11 +52,11 @@ public class RegistryServer {
 		Socket socket = null;
 		try {
 			socket = listener.accept();
+			ObjectOutputStream oos = new ObjectOutputStream(
+					socket.getOutputStream());
 			ObjectInputStream ois = new ObjectInputStream(
 					socket.getInputStream());
 			Request msg = (Request) ois.readObject();
-			ObjectOutputStream oos = new ObjectOutputStream(
-					socket.getOutputStream());
 			oos.writeObject(handle(socket, msg));
 		} catch (Exception e) {
 			e.printStackTrace();

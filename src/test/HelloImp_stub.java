@@ -5,20 +5,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import rmi.core.RemoteException;
 import rmi.message.InvokeRequest;
+import rmi.message.InvokeResponse;
 
 public class HelloImp_stub implements Hello {
-    public final String host = "localhost";
-    public final int port = 12345;
-    private Socket sock;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
+	public final String host = "localhost";
+	public final int port = 12345;
+	private Socket sock;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 
-    public void sayHello(Integer a, Character c) {
+	public String sayHello(Integer a, Character c) {
         setupSocket();
 
-        String methodName = getCurrentMethodName();
-        InvokeRequest request = new InvokeRequest(methodName);
+        InvokeRequest request = new InvokeRequest("sayHello");
+        InvokeResponse response = null;
 
         request.addArg(a);
         request.addArg(c);
@@ -26,24 +28,25 @@ public class HelloImp_stub implements Hello {
         try {
             out.writeObject(request);
             out.flush();
+            response = (InvokeResponse)in.readObject();
             sock.close();
         } catch (IOException e) {
-            System.out.println(e);
-        }
+        	e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+        if (response == null || !response.ok || !(response.result instanceof String))
+        	throw new RemoteException("Bad Response.");
+        return (String)response.result;
     }
 
-    private void setupSocket() {
-        try {
-            sock = new Socket(host, port);
-            out = new ObjectOutputStream(sock.getOutputStream());
-            in = new ObjectInputStream(sock.getInputStream());
-        } catch (IOException e) {
-            System.out.println("socket setup error");
-        }
-    }
-
-    private String getCurrentMethodName() {
-        StackTraceElement elements[] = (new Throwable()).getStackTrace();
-        return elements[1].getMethodName();
-    }
+	private void setupSocket() {
+		try {
+			sock = new Socket(host, port);
+			out = new ObjectOutputStream(sock.getOutputStream());
+			in = new ObjectInputStream(sock.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

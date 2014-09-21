@@ -1,7 +1,8 @@
 package test;
 
-import rmi.core.*;
+import rmi.core.Remote;
+import rmi.core.RemoteException;
 
 public interface Hello extends Remote {
-    public void sayHello(Integer a, Character c);
+    public String sayHello(Integer a, Character c) throws RemoteException;
 }
