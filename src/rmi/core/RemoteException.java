@@ -1,5 +1,11 @@
 package rmi.core;
 
+/**
+ * Remote Exception
+ * 
+ * @author Chao
+ *
+ */
 public class RemoteException extends RuntimeException {
 
 	/**

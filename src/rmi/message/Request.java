@@ -1,5 +1,11 @@
 package rmi.message;
 
+/**
+ * Abstraction of Request in RMI framework
+ * 
+ * @author Chao
+ *
+ */
 public class Request extends Message {
 
 	/**

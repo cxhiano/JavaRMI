@@ -2,6 +2,12 @@ package rmi.message;
 
 import rmi.core.RemoteException;
 
+/**
+ * Abstraction of Response in RMI framework
+ * 
+ * @author Chao
+ *
+ */
 public class Response extends Message {
 
 	/**
