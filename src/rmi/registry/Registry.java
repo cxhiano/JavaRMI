@@ -9,7 +9,7 @@ import rmi.message.LookupRequest;
 import rmi.message.LookupResponse;
 import rmi.message.RebindRequest;
 import rmi.message.Response;
-import rmi.util.SocketHelper;
+import rmi.net.SocketRequest;
 
 public class Registry {
 	public static final int DEFAULT_PORT = 15640;
@@ -29,7 +29,7 @@ public class Registry {
 	 * @return
 	 */
 	public Remote lookup(String key) {
-		LookupResponse resp = (LookupResponse) SocketHelper.request(host,
+		LookupResponse resp = (LookupResponse) SocketRequest.request(host,
 								port, new LookupRequest(key));
 
 		Response.throwIfInvalid(resp);
@@ -42,7 +42,7 @@ public class Registry {
 	 * @param ref
 	 */
 	public void rebind(String key, Remote stub) {
-		SocketHelper.request(host,
+		SocketRequest.request(host,
 				port, new RebindRequest(key, stub));
 	}
 
@@ -51,7 +51,7 @@ public class Registry {
 	 * @return
 	 */
 	public List<String> list() {
-		ListResponse resp = (ListResponse) SocketHelper.request(host,
+		ListResponse resp = (ListResponse) SocketRequest.request(host,
 				port, new ListRequest());
 		Response.throwIfInvalid(resp);
 		return resp.keys;

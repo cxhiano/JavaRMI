@@ -16,14 +16,14 @@ import rmi.message.RebindRequest;
 import rmi.message.RebindResponse;
 import rmi.message.Request;
 import rmi.message.Response;
-import rmi.util.SocketHelper;
+import rmi.net.*;
 import rmi.registry.exception.*;
 
 public class RegistryServer {
 
 	private static Map<String, Remote> map = new HashMap<String, Remote>();
 
-	private static SocketHelper helper = new SocketHelper() {
+	private static SocketRequestHandler handler = new SocketRequestHandler() {
 
 		@Override
 		public Response handle(Request request) {
@@ -58,6 +58,12 @@ public class RegistryServer {
 	};
 
 	public static void main(String[] args) throws IOException {
-		SocketHelper.serve(Registry.DEFAULT_PORT, helper);
+		try {
+			SocketServer server = SocketServer.getServer(Registry.DEFAULT_PORT);
+			server.bindHandler(handler);
+			server.serve();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

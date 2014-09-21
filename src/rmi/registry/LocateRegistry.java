@@ -2,7 +2,7 @@ package rmi.registry;
 
 import rmi.message.AuthRequest;
 import rmi.message.AuthResponse;
-import rmi.util.SocketHelper;
+import rmi.net.SocketRequest;
 
 public class LocateRegistry {
 
@@ -19,7 +19,7 @@ public class LocateRegistry {
 	}
 
 	public static Registry getRegistry(String host, int port) {
-		AuthResponse resp = (AuthResponse)SocketHelper.request(host, port, new AuthRequest());
+		AuthResponse resp = (AuthResponse)SocketRequest.request(host, port, new AuthRequest());
 		if (resp != null)
 			return new Registry(host, port);
 		return null;

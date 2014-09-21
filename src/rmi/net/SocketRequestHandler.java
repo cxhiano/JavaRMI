@@ -6,6 +6,8 @@ import rmi.message.Response;
 public abstract class SocketRequestHandler {
     private String token;
 
+    public SocketRequestHandler() {}
+
     public SocketRequestHandler(String token) {
         this.token = token;
     }
