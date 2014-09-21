@@ -5,9 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import rmi.message.Request;
@@ -35,21 +36,38 @@ public class SocketServer extends Thread {
     private SocketServer(int port) throws IOException {
         this.port = port;
         this.listener = new ServerSocket(port);
-        this.handlers = new HashMap<String, SocketRequestHandler>();
+        this.handlers = new ConcurrentHashMap<String, SocketRequestHandler>();
     }
 
-    public void run() {
-        Socket socket = null;
+    private class Dispatcher implements Runnable {
 
-        while (true) {
+        private Socket socket;
+        private Map<String, SocketRequestHandler> handlers;
+
+        public Dispatcher(Socket socket,
+                Map<String, SocketRequestHandler> handlers) {
+            this.socket = socket;
+            this.handlers = handlers;
+        }
+
+        @Override
+        public void run() {
             try {
-                socket = listener.accept();
                 ObjectOutputStream out = new ObjectOutputStream(
-                        socket.getOutputStream());
+                        this.socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(
-                        socket.getInputStream());
+                        this.socket.getInputStream());
                 Request req = (Request) in.readObject();
-                Response resp = dispatch(req);
+                Response resp = null;
+                SocketRequestHandler handler = this.handlers
+                        .get(req.getToken());
+                if (handler != null) {
+                    resp = handler.handle(req);
+                }
+                if (resp == null) {
+                    resp = new Response();
+                    resp.e = new MissingHandlerException();
+                }
                 out.writeObject(resp);
                 out.flush();
             } catch (IOException e) {
@@ -57,12 +75,27 @@ public class SocketServer extends Thread {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
-                if (socket != null)
+                if (this.socket != null)
                     try {
-                        socket.close();
+                        this.socket.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+            }
+
+        }
+    }
+
+    public void run() {
+        Socket socket = null;
+        Executor executor = Executors.newCachedThreadPool();
+        while (true) {
+            try {
+                socket = listener.accept();
+                LOGGER.info(socket.toString());
+                executor.execute(new Dispatcher(socket, handlers));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -73,13 +106,5 @@ public class SocketServer extends Thread {
 
     public void removeHandler(String token) {
         this.handlers.remove(token);
-    }
-
-    private Response dispatch(Request req) {
-        SocketRequestHandler handler = this.handlers.get(req.getToken());
-        if (handler != null) {
-            return handler.handle(req);
-        }
-        return null;
     }
 }

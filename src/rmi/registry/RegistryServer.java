@@ -2,8 +2,8 @@ package rmi.registry;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import rmi.core.Remote;
 import rmi.message.AuthRequest;
@@ -19,42 +19,56 @@ import rmi.message.Response;
 import rmi.net.SocketRequestHandler;
 import rmi.net.SocketServer;
 import rmi.registry.exception.StubNotFoundException;
-import rmi.registry.exception.UnknownRequestException;
 
 public class RegistryServer {
 
-    private static Map<String, Remote> map = new HashMap<String, Remote>();
+    private static Map<String, Remote> map = new ConcurrentHashMap<String, Remote>();
 
-    private static SocketRequestHandler handler = new SocketRequestHandler() {
+    private static final SocketRequestHandler LOOKUP_HANDLER = new SocketRequestHandler() {
+
+        @Override
+        public Response handle(Request request) {
+            LookupRequest req = (LookupRequest) request;
+            LookupResponse resp = new LookupResponse();
+            resp.stub = map.get(req.key);
+            if (resp.stub == null)
+                resp.e = new StubNotFoundException(String.format(
+                        "No stub for %s", req.key));
+            return resp;
+        }
+
+    };
+
+    private static final SocketRequestHandler LIST_HANDLER = new SocketRequestHandler() {
+
+        @Override
+        public Response handle(Request request) {
+            ListResponse resp = new ListResponse();
+            resp.keys = new ArrayList<String>(map.keySet());
+            return resp;
+        }
+
+    };
+
+    private static final SocketRequestHandler REBIND_HANDLER = new SocketRequestHandler() {
+
+        @Override
+        public Response handle(Request request) {
+            RebindRequest req = (RebindRequest) request;
+            RebindResponse resp = new RebindResponse();
+            map.put(req.key, req.stub);
+            return resp;
+        }
+
+    };
+
+    private static final SocketRequestHandler AUTH_HANDLER = new SocketRequestHandler() {
 
         @Override
         public Response handle(Request request) {
 
-            if (request instanceof LookupRequest) { // Client ask for a stub
-                LookupRequest req = (LookupRequest) request;
-                LookupResponse resp = new LookupResponse();
-                resp.stub = map.get(req.key);
-                if (resp.stub == null)
-                    resp.e = new StubNotFoundException(String.format(
-                            "No stub for %s", req.key));
-                return resp;
-            } else if (request instanceof ListRequest) { // List all stubs
-                ListResponse resp = new ListResponse();
-                resp.keys = new ArrayList<String>(map.keySet());
-                return resp;
-            } else if (request instanceof RebindRequest) {
-                RebindRequest req = (RebindRequest) request;
-                RebindResponse resp = new RebindResponse();
-                map.put(req.key, req.stub);
-                return resp;
-            } else if (request instanceof AuthRequest) {
-                AuthResponse resp = new AuthResponse();
-                return resp;
-            }
-
-            Response r = new Response();
-            r.e = new UnknownRequestException("Unknown Request");
-            return r;
+            AuthResponse resp = new AuthResponse();
+            return resp;
         }
 
     };
@@ -62,7 +76,10 @@ public class RegistryServer {
     public static void main(String[] args) throws IOException {
         try {
             SocketServer server = SocketServer.getServer(Registry.DEFAULT_PORT);
-            server.bindHandler(null, handler);
+            server.bindHandler(LookupRequest.TOKEN, LOOKUP_HANDLER);
+            server.bindHandler(ListRequest.TOKEN, LIST_HANDLER);
+            server.bindHandler(RebindRequest.TOKEN, REBIND_HANDLER);
+            server.bindHandler(AuthRequest.TOKEN, AUTH_HANDLER);
             server.start();
         } catch (IOException e) {
             e.printStackTrace();
