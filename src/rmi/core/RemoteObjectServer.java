@@ -22,15 +22,19 @@ public class RemoteObjectServer extends Thread {
 	private Object handleRequest(InvokeRequest req) {
 		try {
 			Class<? extends Remote> cls = objRef.getClass();
+
+			//No argument
+			if (req.args == null) {
+				Method method = cls.getMethod(req.methodName);
+				return method.invoke(this.objRef);
+			}
+
+			//1 or more argument
 			Class<?>[] args = new Class<?>[req.args.length];
 			for (int i = 0; i < req.args.length; ++i)
 				args[i] = req.args[i].getClass();
 			Method method = cls.getMethod(req.methodName, args);
-			if (req.args.length == 0) {
-				return method.invoke(this.objRef);
-			} else {
-				return method.invoke(this.objRef, req.args);
-			}
+			return method.invoke(this.objRef, req.args);
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
