@@ -58,6 +58,6 @@ public class RegistryServer {
 	};
 
 	public static void main(String[] args) {
-		SocketHandler.serve(LocateRegistry.DEFAULT_PORT, handler);
+		SocketHandler.serve(Registry.DEFAULT_PORT, handler);
 	}
 }
