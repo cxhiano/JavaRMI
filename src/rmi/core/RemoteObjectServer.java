@@ -8,57 +8,70 @@ import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 import rmi.message.Request;
 import rmi.message.Response;
-import rmi.util.SocketHelper;
+import rmi.net.SocketServer;
+import rmi.net.SocketRequestHandler;
 
-public class RemoteObjectServer extends Thread {
-	private Remote objRef = null;
+public class RemoteObjectServer {
+	private Remote obj = null;
+	private RemoteObjectRef ref = null;
 	private int port;
+	private SocketRequestHandler handler;
 
-	public RemoteObjectServer(Remote objRef, int port) {
-		this.objRef = objRef;
+	private RemoteObjectServer(Remote obj, RemoteObjectRef ref, int port) {
+		this.obj = obj;
+		this.ref = ref;
 		this.port = port;
-	}
 
-	private SocketHelper helper = new SocketHelper() {
-		@Override
-		public Response handle(Request request) {
-			InvokeResponse resp = new InvokeResponse();
+		this.handler = new SocketRequestHandler(ref.getName()) {
+			@Override
+			public Response handle(Request request) {
+				InvokeResponse resp = new InvokeResponse();
 
-			try {
-				InvokeRequest req = (InvokeRequest) request;
+				try {
+					InvokeRequest req = (InvokeRequest) request;
 
-				Class<? extends Remote> cls = objRef.getClass();
+					Class<? extends Remote> cls = obj.getClass();
 
-				// No argument
-				if (req.args == null) {
-					Method method = cls.getMethod(req.methodName);
-					resp.result = method.invoke(RemoteObjectServer.this.objRef);
-				} else {
+					// No argument
+					if (req.args == null) {
+						Method method = cls.getMethod(req.methodName);
+						resp.result = method.invoke(RemoteObjectServer.this.obj);
+					} else {
 
-					// 1 or more argument
-					Method method = cls.getMethod(req.methodName, req.types);
+						// 1 or more argument
+						Method method = cls.getMethod(req.methodName, req.types);
 
-					resp.result = method.invoke(RemoteObjectServer.this.objRef,
-									req.args);
+						resp.result = method.invoke(RemoteObjectServer.this.obj,
+										req.args);
+					}
+					return resp;
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+					resp.e = new RemoteException(e.toString());
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+					resp.e = new RemoteException(e.toString());
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+					resp.e = new RemoteException(e.toString());
 				}
 				return resp;
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-				resp.e = new RemoteException(e.toString());
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-				resp.e = new RemoteException(e.toString());
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-				resp.e = new RemoteException(e.toString());
 			}
-			return resp;
+		};
+
+		SocketServer server = SocketServer.getServer(port);
+		server.bindHandler(this.handler);
+
+		if (!server.isRunning()) {
+
 		}
-	};
+
+
+	}
 
 	public void run() {
 		try {
-			SocketHelper.serve(port, helper);
+			SocketHelper.serve(port, handler);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

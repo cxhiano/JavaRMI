@@ -2,9 +2,9 @@ package rmi.core;
 
 import java.io.Serializable;
 
-public class RemoteObjectRef implements Serializable { 
+public class RemoteObjectRef implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3625861985375739675L;
 	public String host;
@@ -22,5 +22,9 @@ public class RemoteObjectRef implements Serializable {
 		this.port = port;
 		this.key = key;
 		this.interfaceName = interfaceName;
+	}
+
+	public String getName() {
+		return String.format("%s:%d/%s@%d", host, port, interfaceName, Integer.toHexString(hashCode()));
 	}
 }

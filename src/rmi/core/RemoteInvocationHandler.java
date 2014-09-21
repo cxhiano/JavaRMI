@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
-import rmi.util.SocketHelper;
+import rmi.net.SocketRequest;
 
 public class RemoteInvocationHandler implements Serializable, InvocationHandler {
 	/**
@@ -29,10 +29,15 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws RemoteException {
-		InvokeResponse response = (InvokeResponse) SocketHelper.request(
-									ref.host, ref.port,
-									new InvokeRequest(method.getName(),
-										method.getParameterTypes(), args));
+
+		InvokeRequest req = new InvokeRequest(
+								this.ref.getName(),
+								method.getName(),
+								method.getParameterTypes(),
+								args);
+
+		InvokeResponse response = (InvokeResponse) SocketRequest.request(
+										ref.host, ref.port, req);
 
 		if (!InvokeResponse.valid(response))
 			throw response.e;

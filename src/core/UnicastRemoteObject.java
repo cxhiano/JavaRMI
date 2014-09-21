@@ -3,8 +3,8 @@ package rmi.core;
 import java.lang.reflect.Proxy;
 
 /**
- * Unicast
- * 
+ * UnicastRemoteObject
+ *
  * @author Chao
  *
  */
@@ -19,17 +19,16 @@ public class UnicastRemoteObject {
     }
 
     /**
-     * Export a Remote obj to a given port, this will start a 
-     * remote server
-     * 
+     * Export a Remote obj to a given port, this will start a remote server
+     *
      * @param obj
      * @param port
      * @return stub for obj
      */
     public static Remote export(Remote obj, int port) {
     	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, null, obj.getClass().getName());
-        RemoteObjectServer server = new RemoteObjectServer(obj, port);
-        server.start();
+
+        RemoteObjectServer.serverObject(obj, ref, port);
 
         return generateStub(obj, ref);
     }
