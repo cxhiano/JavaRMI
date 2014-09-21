@@ -3,6 +3,7 @@ package rmi.core;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
@@ -35,8 +36,12 @@ public class RemoteObjectServer extends Thread {
 
 					// 1 or more argument
 					Class<?>[] args = new Class<?>[req.args.length];
-					for (int i = 0; i < req.args.length; ++i)
-						args[i] = req.args[i].getClass();
+					for (int i = 0; i < req.args.length; ++i) {
+						if (Proxy.isProxyClass(req.args[i].getClass()))
+							args[i] = req.args[i].getClass().getInterfaces()[0];
+						else 
+							args[i] = req.args[i].getClass();
+					}
 					Method method = cls.getMethod(req.methodName, args);
 					resp.result = method.invoke(RemoteObjectServer.this.objRef,
 									req.args);

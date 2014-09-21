@@ -12,7 +12,7 @@ public class Server {
         registry.rebind("Hello", stub);
         Hello b = new HelloImp();
         Hello s = (Hello)UnicastRemoteObject.export(b, 8888);
-        registry.rebind("Hello2", stub);
+        registry.rebind("Hello2", s);
         
     }
 }

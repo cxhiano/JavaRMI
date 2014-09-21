@@ -1,16 +1,26 @@
 package test;
 
+import rmi.core.RemoteException;
+
 
 public class HelloImp implements Hello {
+	@Override
     public String sayHello(Integer a, Character c) {
-        return String.format("Hello %d %c\n", a, c);
+        return String.format("Hello %d %c", a, c);
     }
 
-    public void sayHello() {
-        System.out.println("Hello");
+	@Override
+    public String sayHello() {
+    	return "Hello";
     }
 
+	@Override
     public int sum(int a, int b) {
         return a + b;
     }
+
+	@Override
+	public String sayHello(Hello hello) throws RemoteException {
+		return "Hello" + hello.sayHello();
+	}
 }
