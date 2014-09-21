@@ -17,7 +17,6 @@ public class SocketServer extends Thread {
     private static Map<Integer, SocketServer> serverSockets = new HashMap<Integer, SocketServer>();
 
     public int port;
-    private boolean running;
     private ServerSocket listener;
     private Map<String, SocketRequestHandler> handlers;
 
@@ -34,14 +33,12 @@ public class SocketServer extends Thread {
 
     private SocketServer(int port) throws IOException {
         this.port = port;
-        this.running = false;
         this.listener = new ServerSocket(port);
         this.handlers = new HashMap<String, SocketRequestHandler>();
     }
 
     public void run() {
         Socket socket = null;
-        this.running = true;
 
         while (true) {
             try {
@@ -77,10 +74,6 @@ public class SocketServer extends Thread {
 
     public void removeHandler(SocketRequestHandler handler) {
         this.handlers.remove(handler.getToken());
-    }
-
-    public boolean isRunning() {
-        return running;
     }
 
     private Response dispatch(Request req) {
