@@ -16,8 +16,10 @@ import rmi.message.RebindRequest;
 import rmi.message.RebindResponse;
 import rmi.message.Request;
 import rmi.message.Response;
-import rmi.net.*;
-import rmi.registry.exception.*;
+import rmi.net.SocketRequestHandler;
+import rmi.net.SocketServer;
+import rmi.registry.exception.StubNotFoundException;
+import rmi.registry.exception.UnknownRequestException;
 
 public class RegistryServer {
 
