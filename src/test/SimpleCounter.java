@@ -1,10 +1,10 @@
 package test;
 
-public class AsyncCounter implements Counter {
+public class SimpleCounter implements Counter {
 	
 	private Integer count;
 
-	public AsyncCounter() {
+	public SimpleCounter() {
 		count = 0;
 	}
 	

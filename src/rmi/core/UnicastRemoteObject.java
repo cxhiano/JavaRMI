@@ -28,7 +28,7 @@ public class UnicastRemoteObject {
      * @return stub for obj
      */
     public static Remote export(Remote obj, int port) {
-    	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, obj.getClass().getName());
+    	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, obj);
         try {
             RemoteObjectServer.serveObject(obj, ref, port);
         } catch (IOException e) {

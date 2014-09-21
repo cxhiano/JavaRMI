@@ -16,15 +16,24 @@ public class RemoteObjectRef implements Serializable {
 
 	}
 
-	public RemoteObjectRef(String host, int port, String interfaceName) {
+	public RemoteObjectRef(String host, int port, Remote remote) {
 		this.host = host;
 		this.port = port;
 		this.key = String.format("%s:%d/%s@%s", host, port, interfaceName,
-				Integer.toHexString(hashCode()));
+				System.identityHashCode(remote));
+		this.interfaceName = remote.getClass().getName();
+	}
+
+	public RemoteObjectRef(String host, int port, String key,
+			String interfaceName) {
+		this.host = host;
+		this.port = port;
+		this.key = key;
 		this.interfaceName = interfaceName;
 	}
 
 	public String getKey() {
 		return this.key;
 	}
+
 }
