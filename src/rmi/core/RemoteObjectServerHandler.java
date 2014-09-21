@@ -3,9 +3,6 @@ package rmi.core;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,9 +14,6 @@ import rmi.net.SocketRequestHandler;
 
 public class RemoteObjectServerHandler extends SocketRequestHandler {
 
-    private static List<Class> PRIMITIVE_CLASSES = Arrays.asList(byte.class,
-            short.class, int.class, long.class, float.class, double.class,
-            boolean.class, char.class);
     private static Map<String, Object> OBJECTS = new ConcurrentHashMap<String, Object>();
     private Remote obj;
 
@@ -42,7 +36,7 @@ public class RemoteObjectServerHandler extends SocketRequestHandler {
                 // One or more arguments
                 Method method = cls.getMethod(req.methodName, req.types);
                 for (int i = 0; i < req.args.length; ++i) {
-                    if (!PRIMITIVE_CLASSES.contains(req.types[i])
+                    if (!req.types[i].isPrimitive()
                             && Proxy.isProxyClass(req.args[i].getClass())) {
                         RemoteInvocationHandler invocationHandler = ((RemoteInvocationHandler) Proxy
                                 .getInvocationHandler(req.args[i]));
