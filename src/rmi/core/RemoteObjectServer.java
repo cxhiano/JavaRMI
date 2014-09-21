@@ -22,14 +22,14 @@ public class RemoteObjectServer extends Thread {
 	private Object handleRequest(InvokeRequest req) {
 		try {
 			Class<? extends Remote> cls = objRef.getClass();
-			Class<?>[] args = new Class<?>[req.args.size()];
-			for (int i = 0; i < req.args.size(); ++i)
-				args[i] = req.args.get(i).getClass();
+			Class<?>[] args = new Class<?>[req.args.length];
+			for (int i = 0; i < req.args.length; ++i)
+				args[i] = req.args[i].getClass();
 			Method method = cls.getMethod(req.methodName, args);
-			if (req.args.size() == 0) {
+			if (req.args.length == 0) {
 				return method.invoke(this.objRef);
 			} else {
-				return method.invoke(this.objRef, req.args.toArray());
+				return method.invoke(this.objRef, req.args);
 			}
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
