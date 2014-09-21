@@ -4,14 +4,15 @@ import rmi.core.RemoteException;
 
 
 public class HelloImp implements Hello {
-	@Override
-    public String sayHello(Integer a, Character c) {
-        return String.format("Hello %d %c", a, c);
+    public String myName;
+
+    public HelloImp(String name) {
+        myName = name;
     }
 
 	@Override
     public String sayHello() {
-    	return "Hello";
+    	return String.format("Hello! My name is %s\n", myName);
     }
 
 	@Override
@@ -26,6 +27,11 @@ public class HelloImp implements Hello {
 
 	@Override
 	public String sayHello(Hello hello) throws RemoteException {
-		return "Hello" + hello.sayHello();
+		return String.format("Hello %s ! My name is %s\n", hello.getName(), myName);
 	}
+
+    @Override
+    public String getName() {
+        return myName;
+    }
 }
