@@ -20,22 +20,21 @@ public class UnicastRemoteObject {
     }
 
     /**
-     * Export a Remote obj to a given port, this will start a remote server
+     * Export a Remote obj to a given port and 
+     * start a remote server at port
      *
      * @param obj
      * @param port
      * @return stub for obj
      */
     public static Remote export(Remote obj, int port) {
-    	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, null, obj.getClass().getName());
-
+    	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, obj.getClass().getName());
         try {
             RemoteObjectServer.serveObject(obj, ref, port);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-
         return generateStub(obj, ref);
     }
 }

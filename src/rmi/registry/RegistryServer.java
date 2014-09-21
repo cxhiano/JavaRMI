@@ -29,31 +29,31 @@ public class RegistryServer {
 
 		@Override
 		public Response handle(Request request) {
-			Response r;
-			if (request instanceof LookupRequest) {	//Client ask for a stub
+
+			if (request instanceof LookupRequest) { // Client ask for a stub
 				LookupRequest req = (LookupRequest) request;
 				LookupResponse resp = new LookupResponse();
 				resp.stub = map.get(req.key);
 				if (resp.stub == null)
-					resp.e = new StubNotFoundException(
-								String.format("No stub for %s", req.key));
-				r = resp;
-			} else if (request instanceof ListRequest) { //List all stubs
+					resp.e = new StubNotFoundException(String.format(
+							"No stub for %s", req.key));
+				return resp;
+			} else if (request instanceof ListRequest) { // List all stubs
 				ListResponse resp = new ListResponse();
 				resp.keys = new ArrayList<String>(map.keySet());
-				r = resp;
+				return resp;
 			} else if (request instanceof RebindRequest) {
 				RebindRequest req = (RebindRequest) request;
 				RebindResponse resp = new RebindResponse();
-				r = resp;
 				map.put(req.key, req.stub);
+				return resp;
 			} else if (request instanceof AuthRequest) {
 				AuthResponse resp = new AuthResponse();
-				r = resp;
-			} else {
-				r = new Response();
-				r.e = new UnknownRequestException("Unknown Request");
+				return resp;
 			}
+
+			Response r = new Response();
+			r.e = new UnknownRequestException("Unknown Request");
 			return r;
 		}
 
@@ -62,7 +62,7 @@ public class RegistryServer {
 	public static void main(String[] args) throws IOException {
 		try {
 			SocketServer server = SocketServer.getServer(Registry.DEFAULT_PORT);
-			server.bindHandler(handler);
+			server.bindHandler(null, handler);
 			server.start();
 		} catch (IOException e) {
 			e.printStackTrace();

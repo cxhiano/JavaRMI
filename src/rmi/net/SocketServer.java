@@ -7,12 +7,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import rmi.message.Request;
 import rmi.message.Response;
 
 public class SocketServer extends Thread {
-    private static Map<Integer, SocketServer> serverSockets = new HashMap<Integer, SocketServer>();
+    private static Map<Integer, SocketServer> serverSockets = new ConcurrentHashMap<Integer, SocketServer>();
 
     public int port;
     private ServerSocket listener;
@@ -45,7 +46,6 @@ public class SocketServer extends Thread {
                         socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(
                         socket.getInputStream());
-
                 Request req = (Request) in.readObject();
                 Response resp = dispatch(req);
                 out.writeObject(resp);
@@ -66,12 +66,12 @@ public class SocketServer extends Thread {
         }
     }
 
-    public void bindHandler(SocketRequestHandler handler) {
-        this.handlers.put(handler.getToken(), handler);
+    public void bindHandler(String token, SocketRequestHandler handler) {
+        this.handlers.put(token, handler);
     }
 
-    public void removeHandler(SocketRequestHandler handler) {
-        this.handlers.remove(handler.getToken());
+    public void removeHandler(String token) {
+        this.handlers.remove(token);
     }
 
     private Response dispatch(Request req) {

@@ -30,14 +30,11 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws RemoteException {
 
-		InvokeRequest req = new InvokeRequest(
-								this.ref.getName(),
-								method.getName(),
-								method.getParameterTypes(),
-								args);
+		InvokeRequest req = new InvokeRequest(ref.getKey(), method.getName(),
+				method.getParameterTypes(), args);
 
 		InvokeResponse response = (InvokeResponse) SocketRequest.request(
-										ref.host, ref.port, req);
+				ref.host, ref.port, req);
 
 		if (!InvokeResponse.valid(response))
 			throw response.e;

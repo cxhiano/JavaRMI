@@ -10,15 +10,17 @@ public class TestClient {
     	
         Registry registry = LocateRegistry.getRegistry();
         try {
-            Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
+            // Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
+        	System.out.println(registry.list());
             Hello alice = (Hello) registry.lookup(TestServer.KEY_ALICE);
             Hello bob = (Hello) registry.lookup(TestServer.KEY_BOB);
             Calculator calc = (Calculator) registry.lookup(TestServer.KEY_CALC);
             Counter aCounter = (Counter) registry.lookup(TestServer.KEY_ASYNC);
             Counter sCounter = (Counter) registry.lookup(TestServer.KEY_SYNC);
             //Primitive type test
-            Assert.assertEquals("Hello! My name is alice", alice.sayHello());
-            Assert.assertEquals("Hello! My name is bob", bob.sayHello());
+            Assert.assertEquals("Hello! My name is Alice", alice.sayHello());
+            Assert.assertEquals("Hello! My name is Bob", bob.sayHello());
+            System.out.println(alice.sayHello(bob));
         } catch (Exception e) {
         	e.printStackTrace();
         }
