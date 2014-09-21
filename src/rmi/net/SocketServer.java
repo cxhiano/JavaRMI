@@ -68,7 +68,6 @@ public class SocketServer extends Thread {
 
     public void bindHandler(SocketRequestHandler handler) {
         this.handlers.put(handler.getToken(), handler);
-        System.out.println(handler.getToken());
     }
 
     public void removeHandler(SocketRequestHandler handler) {
@@ -76,7 +75,6 @@ public class SocketServer extends Thread {
     }
 
     private Response dispatch(Request req) {
-        System.out.println(req.getToken());
         SocketRequestHandler handler = this.handlers.get(req.getToken());
         if (handler != null) {
             return handler.handle(req);
