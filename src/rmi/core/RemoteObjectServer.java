@@ -17,6 +17,20 @@ public class RemoteObjectServer {
 	private int port;
 	private SocketRequestHandler handler;
 
+	public static void serveObject(Remote obj, RemoteObjectRef ref, int port)
+			throws IOException {
+
+		RemoteObjectServer remoteServer = new RemoteObjectServer(obj, ref, port);
+
+		SocketServer server = SocketServer.getServer(port);
+		server.bindHandler(remoteServer.handler);
+
+		//Start the server if it's not yet started
+		if (server.getState() == Thread.State.NEW)
+			server.start();
+
+	}
+
 	private RemoteObjectServer(Remote obj, RemoteObjectRef ref, int port) {
 		this.obj = obj;
 		this.ref = ref;
@@ -58,23 +72,5 @@ public class RemoteObjectServer {
 				return resp;
 			}
 		};
-
-		SocketServer server = SocketServer.getServer(port);
-		server.bindHandler(this.handler);
-
-		if (!server.isRunning()) {
-
-		}
-
-
 	}
-
-	public void run() {
-		try {
-			SocketHelper.serve(port, handler);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

@@ -1,6 +1,7 @@
 package rmi.core;
 
 import java.lang.reflect.Proxy;
+import java.io.IOException;
 
 /**
  * UnicastRemoteObject
@@ -28,7 +29,12 @@ public class UnicastRemoteObject {
     public static Remote export(Remote obj, int port) {
     	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, null, obj.getClass().getName());
 
-        RemoteObjectServer.serverObject(obj, ref, port);
+        try {
+            RemoteObjectServer.serveObject(obj, ref, port);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
 
         return generateStub(obj, ref);
     }

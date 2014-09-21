@@ -20,11 +20,11 @@ public class RemoteObjectRef implements Serializable {
 			String interfaceName) {
 		this.host = host;
 		this.port = port;
-		this.key = key;
+		this.key = String.format("%s:%d/%s@%s", host, port, interfaceName, Integer.toHexString(hashCode()));
 		this.interfaceName = interfaceName;
 	}
 
 	public String getName() {
-		return String.format("%s:%d/%s@%d", host, port, interfaceName, Integer.toHexString(hashCode()));
+		return this.key;
 	}
 }
