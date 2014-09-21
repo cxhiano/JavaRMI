@@ -9,4 +9,6 @@ public interface Hello extends Remote {
     public void sayHello() throws RemoteException;
 
     public int sum(int a, int c) throws RemoteException;
+
+    public Integer sum(Integer a, Integer b) throws RemoteException;
 }

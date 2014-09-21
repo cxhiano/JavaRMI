@@ -8,7 +8,7 @@ public class Client {
         Registry registry = LocateRegistry.getRegistry();
         System.out.println(registry.list());
         Hello h = (Hello) registry.lookup("Hello");
-        System.out.println(h.sayHello(10, 'c'));
+        System.out.println(h.sum(10, 8));
         h.sayHello();
         try {
 			Class.forName("test.Hello");
