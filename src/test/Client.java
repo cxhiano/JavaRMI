@@ -9,10 +9,14 @@ public class Client {
         System.out.println(registry.list());
         Hello h = (Hello) registry.lookup("Hello");
         System.out.println(h.sayHello(10, 'c'));
+
+        //Primitive type test
+        System.out.println(h.sum(10, 20));
+        System.out.println(h.sum(new Integer(10), new Integer(20)));
+
         System.out.println(h.sayHello());
-        Hello h2 = (Hello) registry.lookup("Hello2");
-        System.out.println(h.sayHello(h2));
-        System.out.println(h.sum(10, 8));
+        //Hello h2 = (Hello) registry.lookup("Hello2");
+        //System.out.println(h.sayHello(h2));
         try {
 			Class.forName("test.Hello");
 			System.out.println("Client JVM has interface test.HelloImpl");

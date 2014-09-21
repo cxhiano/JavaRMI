@@ -21,7 +21,7 @@ public class HelloImp implements Hello {
 
 	@Override
     public Integer sum(Integer a, Integer b) {
-        return a + b;
+        return a + b + 1000000;
     }
 
 	@Override
