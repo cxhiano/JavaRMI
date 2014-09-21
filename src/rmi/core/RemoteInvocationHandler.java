@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
+import rmi.registry.exception.RemoteException;
 
 public class RemoteInvocationHandler implements Serializable, InvocationHandler {
 	/**

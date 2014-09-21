@@ -3,7 +3,6 @@ package test;
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
 import rmi.registry.exception.*;
-import rmi.core.RemoteException;
 
 public class Client {
     public static void main(String args[]) {

@@ -1,7 +1,12 @@
 package rmi.registry.exception;
 
 public class StubNotFoundException extends RuntimeException {
-    public StubNotFoundException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4723720683944630901L;
+
+	public StubNotFoundException() {
 
     }
 

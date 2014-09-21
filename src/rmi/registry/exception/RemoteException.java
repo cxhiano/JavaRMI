@@ -1,4 +1,4 @@
-package rmi.core;
+package rmi.registry.exception;
 
 /**
  * Remote Exception

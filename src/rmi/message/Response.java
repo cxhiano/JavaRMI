@@ -1,6 +1,6 @@
 package rmi.message;
 
-import rmi.core.RemoteException;
+import rmi.registry.exception.RemoteException;
 
 /**
  * Abstraction of Response in RMI framework
@@ -23,5 +23,10 @@ public class Response extends Message {
 
 	public static boolean valid(Response response) {
 		return response != null && response.e == null;
+	}
+
+	public static void throwIfInvalid(Response response) {
+		if (!valid(response))
+			throw response.e;
 	}
 }

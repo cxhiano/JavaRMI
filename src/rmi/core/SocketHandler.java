@@ -10,7 +10,8 @@ import rmi.message.Request;
 import rmi.message.Response;
 
 /**
- * A wrapper class for servers to serve and for clients to send requests and get response.
+ * A wrapper class for servers to serve and for clients to send requests and get
+ * response.
  *
  * @author Chao
  *
@@ -26,7 +27,8 @@ public abstract class SocketHandler {
 	 * @param handler
 	 * @throws IOException
 	 */
-	public static void serve(int port, SocketHandler handler) throws IOException {
+	public static void serve(int port, SocketHandler handler)
+			throws IOException {
 		ServerSocket listener = null;
 		try {
 			listener = new ServerSocket(port);
@@ -53,6 +55,7 @@ public abstract class SocketHandler {
 		Socket socket = null;
 		try {
 			socket = listener.accept();
+			socket.setSoTimeout(10000);
 			ObjectOutputStream out = new ObjectOutputStream(
 					socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(
@@ -60,7 +63,9 @@ public abstract class SocketHandler {
 			Request req = (Request) in.readObject();
 			out.writeObject(handler.handle(req));
 			out.flush();
-		} catch (Exception e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
 			if (socket != null) {
@@ -86,9 +91,10 @@ public abstract class SocketHandler {
 
 		try {
 			sock = new Socket(host, port);
+			sock.setSoTimeout(10000);
 
 			ObjectOutputStream out = new ObjectOutputStream(
-										sock.getOutputStream());
+					sock.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 
 			out.writeObject(request);

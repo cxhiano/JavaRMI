@@ -1,6 +1,6 @@
 package test;
 
-import rmi.core.RemoteException;
+import rmi.registry.exception.RemoteException;
 
 
 public class HelloImp implements Hello {
