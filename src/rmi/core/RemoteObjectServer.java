@@ -21,14 +21,17 @@ public class RemoteObjectServer extends Thread {
         this.port = port;
     }
 
-    private void handleRequest(InvokeRequest req) {
+    private Object handleRequest(InvokeRequest req) {
         try {
             Class cls = ref.getClass();
-            Class<?>[] args = new Class<?>[req.args.size()];
+
+            Class[] args = new Class[req.args.size()];
             for (int i = 0; i < req.args.size(); ++i)
                 args[i] = req.args.get(i).getClass();
+
             Method method = cls.getMethod(req.methodName, args);
-            method.invoke(this.ref, req.args.toArray());
+
+            return method.invoke(this.ref, req.args.toArray());
         } catch (NoSuchMethodException e ) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -36,23 +39,27 @@ public class RemoteObjectServer extends Thread {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public void run() {
         ServerSocket listener;
         try {
-            listener = new ServerSocket(port);
-
-            Socket sock = listener.accept();
-            System.out.println("incoming request");
-
-            ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
-
             while (true) {
-                System.out.println("waiting for request");
+                listener = new ServerSocket(port);
+
+                Socket sock = listener.accept();
+
+                ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
+
                 InvokeRequest request = (InvokeRequest)in.readObject();
-                if (request != null) handleRequest(request);
+                if (request != null) {
+                    Object ret = handleRequest(request);
+                    out.writeObject(ret);
+                }
+
+                sock.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
