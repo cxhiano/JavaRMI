@@ -12,48 +12,47 @@ import rmi.message.Response;
 import rmi.net.SocketRequest;
 
 public class Registry {
-	public static final int DEFAULT_PORT = 15640;
-	public static final String DEFAULT_HOST = "localhost";
+    public static final int DEFAULT_PORT = 15640;
+    public static final String DEFAULT_HOST = "localhost";
 
-	public String host;
-	public int port;
+    public String host;
+    public int port;
 
-	public Registry(String host, int port) {
-		this.host = host;
-		this.port = port;
-	}
+    public Registry(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
 
-	/**
-	 *
-	 * @param key
-	 * @return
-	 */
-	public Remote lookup(String key) {
-		LookupResponse resp = (LookupResponse) SocketRequest.request(host,
-								port, new LookupRequest(key));
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Remote lookup(String key) {
+        LookupResponse resp = (LookupResponse) SocketRequest.request(host,
+                port, new LookupRequest(key));
 
-		Response.throwIfInvalid(resp);
-		return resp.stub;
-	}
+        Response.throwIfInvalid(resp);
+        return resp.stub;
+    }
 
-	/**
-	 *
-	 * @param key
-	 * @param ref
-	 */
-	public void rebind(String key, Remote stub) {
-		SocketRequest.request(host,
-				port, new RebindRequest(key, stub));
-	}
+    /**
+     *
+     * @param key
+     * @param ref
+     */
+    public void rebind(String key, Remote stub) {
+        SocketRequest.request(host, port, new RebindRequest(key, stub));
+    }
 
-	/**
-	 *
-	 * @return
-	 */
-	public List<String> list() {
-		ListResponse resp = (ListResponse) SocketRequest.request(host,
-				port, new ListRequest());
-		Response.throwIfInvalid(resp);
-		return resp.keys;
-	}
+    /**
+     *
+     * @return
+     */
+    public List<String> list() {
+        ListResponse resp = (ListResponse) SocketRequest.request(host, port,
+                new ListRequest());
+        Response.throwIfInvalid(resp);
+        return resp.keys;
+    }
 }

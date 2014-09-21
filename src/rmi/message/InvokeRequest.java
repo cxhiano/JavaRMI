@@ -6,7 +6,8 @@ public class InvokeRequest extends Request {
     public Class[] types;
     public Object[] args;
 
-    public InvokeRequest(String token, String methodName, Class[] types, Object[] args) {
+    public InvokeRequest(String token, String methodName, Class[] types,
+            Object[] args) {
         this.token = token;
         this.methodName = methodName;
         this.types = types;

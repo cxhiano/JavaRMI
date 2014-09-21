@@ -25,7 +25,7 @@ public class SocketRequest {
             sock = new Socket(host, port);
 
             ObjectOutputStream out = new ObjectOutputStream(
-                                        sock.getOutputStream());
+                    sock.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 
             out.writeObject(request);

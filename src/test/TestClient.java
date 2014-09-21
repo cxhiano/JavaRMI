@@ -7,7 +7,7 @@ import rmi.registry.Registry;
 
 public class TestClient {
     public static void main(String args[]) {
-    	
+
         Registry registry = LocateRegistry.getRegistry();
         try {
             Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
@@ -17,9 +17,10 @@ public class TestClient {
             Counter counter = (Counter) registry.lookup(TestServer.KEY_COUNT);
             Assert.assertEquals("Hello! My name is Alice", alice.sayHello());
             Assert.assertEquals("Hello! My name is Bob", bob.sayHello());
-            Assert.assertEquals("Hello Bob ! My name is Alice", alice.sayHello(bob));
+            Assert.assertEquals("Hello Bob ! My name is Alice",
+                    alice.sayHello(bob));
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         System.out.println("Test finished");
     }

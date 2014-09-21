@@ -13,22 +13,20 @@ public class UnicastRemoteObject {
     private static Remote generateStub(Remote obj, RemoteObjectRef ref) {
         RemoteInvocationHandler handler = new RemoteInvocationHandler(ref);
         Remote proxy = (Remote) Proxy.newProxyInstance(
-                            Remote.class.getClassLoader(),
-                            obj.getClass().getInterfaces(),
-                            handler);
+                Remote.class.getClassLoader(), obj.getClass().getInterfaces(),
+                handler);
         return proxy;
     }
 
     /**
-     * Export a Remote obj to a given port and 
-     * start a remote server at port
+     * Export a Remote obj to a given port and start a remote server at port
      *
      * @param obj
      * @param port
      * @return stub for obj
      */
     public static Remote export(Remote obj, int port) {
-    	RemoteObjectRef ref = new RemoteObjectRef("localhost", port, obj);
+        RemoteObjectRef ref = new RemoteObjectRef("localhost", port, obj);
         try {
             RemoteObjectServer.serveObject(obj, ref, port);
         } catch (IOException e) {
