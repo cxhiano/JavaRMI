@@ -12,6 +12,7 @@ public class Client {
         System.out.println(h.sayHello());
         Hello h2 = (Hello) registry.lookup("Hello2");
         System.out.println(h.sayHello(h2));
+        System.out.println(h.sum(10, 8));
         try {
 			Class.forName("test.Hello");
 			System.out.println("Client JVM has interface test.HelloImpl");

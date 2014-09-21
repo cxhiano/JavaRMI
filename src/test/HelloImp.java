@@ -20,6 +20,11 @@ public class HelloImp implements Hello {
     }
 
 	@Override
+    public Integer sum(Integer a, Integer b) {
+        return a + b;
+    }
+
+	@Override
 	public String sayHello(Hello hello) throws RemoteException {
 		return "Hello" + hello.sayHello();
 	}
