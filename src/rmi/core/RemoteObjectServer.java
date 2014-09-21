@@ -3,7 +3,6 @@ package rmi.core;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;

@@ -24,4 +24,9 @@ public class Response extends Message {
 	public static boolean valid(Response response) {
 		return response != null && response.e == null;
 	}
+
+	public static void throwIfInvalid(Response response) {
+		if (!valid(response))
+			throw response.e;
+	}
 }
