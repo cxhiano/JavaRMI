@@ -8,8 +8,9 @@ public class Test {
         Hello h = new HelloImp(),
               stub = (Hello) Unicast.generateStub(h, 5555);
 
+        int a = 1, b = 2;
         for (Method m : stub.getClass().getDeclaredMethods())
-            System.out.println(m);
+            for (Type t : m.getGenericParameterTypes())
 
     }
 
