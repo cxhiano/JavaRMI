@@ -3,13 +3,19 @@ package test;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
 import rmi.core.RemoteException;
 import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 
-public class HelloImp_stub implements Hello {
+public class HelloImp_stub implements Hello, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 978638176150234989L;
+	
 	public final String host = "localhost";
 	public final int port = 12345;
 	private Socket sock;

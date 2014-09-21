@@ -14,10 +14,10 @@ public class LocateRegistry {
 		Registry registry = null;
 		try {
 			socket = new Socket(host, port);
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.writeObject(new AuthRequest());
-			AuthResponse resp = (AuthResponse)ois.readObject();
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			out.writeObject(new AuthRequest());
+			AuthResponse resp = (AuthResponse)in.readObject();
 			if (!resp.ok)
 				throw new RemoteException("Cannot talk to registry.");
 			return new Registry(host, port);

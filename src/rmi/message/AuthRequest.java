@@ -1,6 +1,6 @@
 package rmi.message;
 
-public class AuthRequest extends Response {
+public class AuthRequest extends Request {
 
 	/**
 	 * 

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rmi.core.Remote;
+import rmi.message.AuthRequest;
+import rmi.message.AuthResponse;
 import rmi.message.ListRequest;
 import rmi.message.ListResponse;
 import rmi.message.LookupRequest;
@@ -41,6 +43,10 @@ public class RegistryServer {
 			resp.ok = true;
 			r = resp;
 			map.put(req.key, req.stub);
+		} else if (object instanceof AuthRequest) {
+			AuthResponse resp = new AuthResponse();
+			resp.ok = true;
+			r = resp;
 		} else {
 			r = new Response();
 			r.ok = false;

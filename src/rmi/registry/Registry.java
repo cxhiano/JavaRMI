@@ -29,13 +29,13 @@ public class Registry {
 		Socket socket = null;
 		try {
 			socket = new Socket(host, port);
-			ObjectInputStream ois = new ObjectInputStream(
+			ObjectInputStream out = new ObjectInputStream(
 					socket.getInputStream());
-			ObjectOutputStream oos = new ObjectOutputStream(
+			ObjectOutputStream in = new ObjectOutputStream(
 					socket.getOutputStream());
 			LookupRequest req = new LookupRequest(key);
-			oos.writeObject(req);
-			LookupResponse resp = (LookupResponse) ois.readObject();
+			in.writeObject(req);
+			LookupResponse resp = (LookupResponse) out.readObject();
 			if (!resp.ok)
 				throw new RemoteException("Bad Response.");
 			return resp.stub;
@@ -61,13 +61,13 @@ public class Registry {
 		Socket socket = null;
 		try {
 			socket = new Socket(host, port);
-			ObjectInputStream ois = new ObjectInputStream(
-					socket.getInputStream());
-			ObjectOutputStream oos = new ObjectOutputStream(
+			ObjectOutputStream out = new ObjectOutputStream(
 					socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(
+					socket.getInputStream());
 			RebindRequest req = new RebindRequest(key, stub);
-			oos.writeObject(req);
-			RebindResponse resp = (RebindResponse) ois.readObject();
+			out.writeObject(req);
+			RebindResponse resp = (RebindResponse) in.readObject();
 			if (!resp.ok)
 				throw new RemoteException("Bad Response.");
 		} catch (Exception e) {
