@@ -1,5 +1,6 @@
 package test;
 
+import rmi.core.RemoteException;
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
 import rmi.registry.exception.*;

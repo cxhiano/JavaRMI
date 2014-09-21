@@ -9,7 +9,6 @@ import rmi.message.InvokeRequest;
 import rmi.message.InvokeResponse;
 import rmi.message.Request;
 import rmi.message.Response;
-import rmi.registry.exception.RemoteException;
 
 public class RemoteObjectServer extends Thread {
 	private Remote objRef = null;

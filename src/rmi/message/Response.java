@@ -1,6 +1,6 @@
 package rmi.message;
 
-import rmi.registry.exception.RemoteException;
+import rmi.core.RemoteException;
 
 /**
  * Abstraction of Response in RMI framework
