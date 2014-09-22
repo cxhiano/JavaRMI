@@ -27,6 +27,7 @@ public class SocketServer extends Thread {
 
         if (server == null) {
             server = new SocketServer(port);
+            server.start();
             serverSockets.put(port, server);
         }
 
@@ -100,11 +101,11 @@ public class SocketServer extends Thread {
         }
     }
 
-    public void bindHandler(String token, SocketRequestHandler handler) {
+    public synchronized void bindHandler(String token, SocketRequestHandler handler) {
         this.handlers.put(token, handler);
     }
 
-    public void removeHandler(String token) {
+    public synchronized void removeHandler(String token) {
         this.handlers.remove(token);
     }
 }
