@@ -26,14 +26,16 @@ public class TestClient {
 
             // Connect to RegistryServer at default port(15640), should not
             // raise any exceptions
-            registry = LocateRegistry.getRegistry();
+            registry = LocateRegistry.getRegistry("10.0.0.6");
 
             // List all names on RegistryServer
             Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
 
             // Lookup Hello instance Alice and Bob
             Hello alice = (Hello) registry.lookup(TestServer.KEY_ALICE);
+            Assert.assertNotNull(alice);
             Hello bob = (Hello) registry.lookup(TestServer.KEY_BOB);
+            Assert.assertNotNull(bob);
             // Test if stub works correctly
             Assert.assertEquals("Hello! My name is Alice", alice.sayHello());
             Assert.assertEquals("Hello! My name is Bob", bob.sayHello());
@@ -41,6 +43,7 @@ public class TestClient {
             Assert.assertEquals("Hello Bob ! My name is Alice",
                     alice.sayHello(bob));
             System.out.println(LocalHello.class.getCanonicalName());
+            // Test if local Remote objects could be successfully passed as arguments
             Assert.assertEquals("Hello Charlot ! My name is Alice",
                     alice.sayHello(new LocalHello()));
             System.out.println(alice.sayHello(new LocalHello()));

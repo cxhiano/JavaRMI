@@ -16,19 +16,19 @@ public class TestServer {
     public static void main(String args[]) {
         Registry registry = LocateRegistry.getRegistry();
         Hello bob = new HelloImpl("Bob");
-        registry.rebind(KEY_BOB, (Hello) UnicastRemoteObject.export(bob, 7777));
+        registry.rebind(KEY_BOB, (Hello) UnicastRemoteObject.export(bob, "10.0.0.6", 7777));
         Hello alice = new HelloImpl("Alice");
         registry.rebind(KEY_ALICE,
-                (Hello) UnicastRemoteObject.export(alice, 7777));
+                (Hello) UnicastRemoteObject.export(alice, "10.0.0.6", 7777));
         Calculator calc = new SimpleCalculator();
         registry.rebind(KEY_CALC,
-                (Calculator) UnicastRemoteObject.export(calc, 7777));
+                (Calculator) UnicastRemoteObject.export(calc, "10.0.0.6", 7777));
         Counter aCounter = new SimpleCounter();
         registry.rebind(KEY_COUNT,
-                (Counter) UnicastRemoteObject.export(aCounter, 8888));
+                (Counter) UnicastRemoteObject.export(aCounter, "10.0.0.6", 8888));
         Counter sCounter = new SynchronizedCounter();
         registry.rebind(KEY_SYNC_COUNT,
-                (Counter) UnicastRemoteObject.export(sCounter, 8888));
+                (Counter) UnicastRemoteObject.export(sCounter, "10.0.0.6", 8888));
 
     }
 }
