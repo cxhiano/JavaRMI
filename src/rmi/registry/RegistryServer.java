@@ -80,7 +80,6 @@ public class RegistryServer {
             server.bindHandler(ListRequest.TOKEN, LIST_HANDLER);
             server.bindHandler(RebindRequest.TOKEN, REBIND_HANDLER);
             server.bindHandler(AuthRequest.TOKEN, AUTH_HANDLER);
-            server.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
