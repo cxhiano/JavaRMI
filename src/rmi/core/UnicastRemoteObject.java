@@ -4,17 +4,30 @@ import java.lang.reflect.Proxy;
 import java.io.IOException;
 
 /**
- * UnicastRemoteObject
+ * Used for exporting a remote object and obtaining its client-side stub. On
+ * client-side, all * method invocations of object obj are intercepted. Instead
+ * of invoking the 'real' method, the proxy forwards the data associated with
+ * the invocation to the host where the 'real' object is served.
  *
- * @author Chao
+ * @author Chao Xin, Chao Zhang
  *
  */
 public class UnicastRemoteObject {
+    /**
+     * Generate the stub for object obj by using Proxy.
+     *
+     * @param obj
+     * @param ref
+     * @return Stub for obj
+     */
     private static Remote generateStub(Remote obj, RemoteObjectRef ref) {
         RemoteInvocationHandler handler = new RemoteInvocationHandler(ref);
+
+        /* Create a proxy intercepts the invocation of obj's method */
         Remote proxy = (Remote) Proxy.newProxyInstance(
                 Remote.class.getClassLoader(), obj.getClass().getInterfaces(),
                 handler);
+
         return proxy;
     }
 

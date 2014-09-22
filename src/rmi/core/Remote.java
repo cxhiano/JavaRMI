@@ -1,9 +1,10 @@
 package rmi.core;
 
 /**
- * Remote Interface
- * 
- * @author Chao
+ *  Every object that supports remote method invocation must implement this
+ *  interface
+ *
+ * @author Chao Xin, Chao Zhang
  *
  */
 public interface Remote {
