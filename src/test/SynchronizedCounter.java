@@ -1,5 +1,12 @@
 package test;
 
+/**
+ * A synchronous counter. If called in multiple threads, this counter assures
+ * consistency.
+ * 
+ * @author Chao
+ *
+ */
 public class SynchronizedCounter implements Counter {
 
     private Integer count;

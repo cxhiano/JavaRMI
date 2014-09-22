@@ -39,6 +39,14 @@ public class RemoteObjectServerHandler extends SocketRequestHandler {
 
     @Override
     public Response handle(Request request) {
+        try {
+            Class cls = Class.forName("test.TestServer");
+            System.out.println("Loaded Server!");
+            cls = Class.forName("test.TestClient.LocalHello");
+            System.out.println("Loaded!");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Not Loaded!");
+        }
         InvokeResponse resp = new InvokeResponse();
 
         try {

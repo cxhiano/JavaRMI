@@ -2,6 +2,13 @@ package test;
 
 import rmi.core.RemoteException;
 
+/**
+ * Implementation of Hello Interface. A robust RMI implementation can support
+ * Remote stubs as arguments.
+ * 
+ * @author Chao
+ *
+ */
 public class HelloImpl implements Hello {
     public String myName;
 

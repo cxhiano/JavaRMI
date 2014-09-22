@@ -1,33 +1,58 @@
 package test;
 
+import java.io.Serializable;
+
 import org.junit.Assert;
 
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
 import rmi.registry.exception.StubNotFoundException;
 
+/**
+ * A Test Client. Make sure RegistryServer and TestServer are already launched
+ * before launching this client. If tests are passed, "Test OK!" will eventually
+ * be printed out. Otherwise, "Test Failed" will be printed out.
+ * 
+ * @author Chao
+ *
+ */
 public class TestClient {
     public static void main(String args[]) {
 
         try {
+            // Try to connect a nonexistent port, should return null
             Registry registry = LocateRegistry.getRegistry(64015);
             Assert.assertNull(registry);
-            
+
+            // Connect to RegistryServer at default port(15640), should not
+            // raise any exceptions
             registry = LocateRegistry.getRegistry();
+
+            // List all names on RegistryServer
             Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
+
+            // Lookup Hello instance Alice and Bob
             Hello alice = (Hello) registry.lookup(TestServer.KEY_ALICE);
             Hello bob = (Hello) registry.lookup(TestServer.KEY_BOB);
+            // Test if stub works correctly
             Assert.assertEquals("Hello! My name is Alice", alice.sayHello());
             Assert.assertEquals("Hello! My name is Bob", bob.sayHello());
+            // Test if stub could be successfully passed as arguments
             Assert.assertEquals("Hello Bob ! My name is Alice",
                     alice.sayHello(bob));
-            
+            System.out.println(LocalHello.class.getCanonicalName());
+            Assert.assertEquals("Hello Charlot ! My name is Alice",
+                    alice.sayHello(new LocalHello()));
+            System.out.println(alice.sayHello(new LocalHello()));
+
             Calculator calc = (Calculator) registry.lookup(TestServer.KEY_CALC);
-            Assert.assertEquals(1, calc.add(0, 1));
-            Assert.assertEquals(2, calc.divide(5, 2));
-            Assert.assertEquals(3, calc.minus(4, 1));
-            Assert.assertEquals(4, calc.multiply(2, 2));
-            
+            Assert.assertSame(1, calc.add(0, 1));
+            Assert.assertSame(1, calc.add(new Integer(0), new Integer(1))
+                    .intValue());
+            Assert.assertSame(2, calc.divide(5, 2));
+            Assert.assertSame(3, calc.minus(4, 1));
+            Assert.assertSame(4, calc.multiply(2, 2));
+
             Counter aCounter = (Counter) registry.lookup(TestServer.KEY_COUNT);
             aCounter.reset();
             Thread t = new BumpThread(aCounter);
@@ -38,7 +63,7 @@ public class TestClient {
             t2.join();
             Assert.assertTrue(aCounter.getCount() <= 2 * BumpThread.COUNT);
             Assert.assertTrue(aCounter.getCount() >= BumpThread.COUNT);
-            
+
             Counter sCounter = (Counter) registry
                     .lookup(TestServer.KEY_SYNC_COUNT);
             sCounter.reset();
@@ -49,7 +74,7 @@ public class TestClient {
             t.join();
             t2.join();
             Assert.assertTrue(sCounter.getCount() == 2 * BumpThread.COUNT);
-            
+
             Exception e = null;
             try {
                 registry.lookup("Bad");
@@ -57,7 +82,7 @@ public class TestClient {
                 e = exception;
             }
             Assert.assertTrue(e instanceof StubNotFoundException);
-            
+
             System.out.println("Test OK!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +103,25 @@ public class TestClient {
         public void run() {
             for (int i = 0; i < COUNT; ++i)
                 this.counter.bump();
+        }
+
+    }
+
+    private static class LocalHello implements Hello, Serializable {
+        @Override
+        public String sayHello() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public String sayHello(Hello hello) {
+            return null;
+        }
+
+        @Override
+        public String getName() {
+            return "Charlot";
         }
 
     }
