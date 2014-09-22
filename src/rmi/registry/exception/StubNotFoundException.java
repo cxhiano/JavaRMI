@@ -1,5 +1,12 @@
 package rmi.registry.exception;
 
+/**
+ * Exception representing a name is not binded to a stub on
+ * {@link rmi.registry.RegistryServer}
+ * 
+ * @author Chao
+ *
+ */
 public class StubNotFoundException extends RuntimeException {
     /**
 	 * 

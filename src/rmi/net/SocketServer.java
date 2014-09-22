@@ -23,16 +23,15 @@ import rmi.message.Response;
  * associated with a token for identification.
  *
  * The server receive Request object and response with Response object. Each
- * Request object has a getToken() method to return a token which identifies
- * its handler.
+ * Request object has a <code> getToken() </code> method to return a token which
+ * identifies its handler.
  *
  *
  * @author Chao Xin, Chao Zhang
  */
 public class SocketServer extends Thread {
     private static final Logger LOGGER = Logger.getGlobal();
-    private static Map<Integer, SocketServer> serverSockets =
-        new ConcurrentHashMap<Integer, SocketServer>();
+    private static Map<Integer, SocketServer> serverSockets = new ConcurrentHashMap<Integer, SocketServer>();
 
     public int port;
     private ServerSocket listener;
@@ -48,7 +47,7 @@ public class SocketServer extends Thread {
             throws IOException {
         SocketServer server = serverSockets.get(port);
 
-        //The server does not exist yet. Create one.
+        // The server does not exist yet. Create one.
         if (server == null) {
             server = new SocketServer(port);
             server.start();
@@ -93,16 +92,17 @@ public class SocketServer extends Thread {
                 Request req = (Request) in.readObject();
                 Response resp = null;
 
-                //Fetch handler by the token in Request object.
-                SocketRequestHandler handler = this.handlers.get(req.getToken());
+                // Fetch handler by the token in Request object.
+                SocketRequestHandler handler = this.handlers
+                        .get(req.getToken());
 
-                if (handler != null) {  //Fetch success
+                if (handler != null) { // Fetch success
                     resp = handler.handle(req);
-                } else { //Cannot find corresponding handler
+                } else { // Cannot find corresponding handler
                     resp.e = new MissingHandlerException();
                 }
 
-                //Response the request
+                // Response the request
                 out.writeObject(resp);
                 out.flush();
             } catch (IOException e) {
@@ -131,7 +131,7 @@ public class SocketServer extends Thread {
             try {
                 socket = listener.accept();
                 LOGGER.info(socket.toString());
-                //Assign to a dispatcher on a new thread
+                // Assign to a dispatcher on a new thread
                 executor.execute(new Dispatcher(socket, handlers));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -145,12 +145,14 @@ public class SocketServer extends Thread {
      * @param token
      * @param handler
      */
-    public synchronized void bindHandler(String token, SocketRequestHandler handler) {
+    public synchronized void bindHandler(String token,
+            SocketRequestHandler handler) {
         this.handlers.put(token, handler);
     }
 
     /**
      * Remove the handler associated with given token
+     * 
      * @param token
      */
     public synchronized void removeHandler(String token) {

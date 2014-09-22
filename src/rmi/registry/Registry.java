@@ -11,9 +11,13 @@ import rmi.message.RebindRequest;
 import rmi.message.Response;
 import rmi.net.SocketRequest;
 
+/**
+ * Registry interface.
+ * 
+ * @author Chao
+ *
+ */
 public class Registry {
-    public static final int DEFAULT_PORT = 15640;
-    public static final String DEFAULT_HOST = "localhost";
 
     public String host;
     public int port;
@@ -24,35 +28,36 @@ public class Registry {
     }
 
     /**
-     *
-     * @param key
-     * @return
+     * 
+     * @param name
+     * @return stub corresponding to given name
      */
-    public Remote lookup(String key) {
+    public Remote lookup(String name) {
         LookupResponse resp = (LookupResponse) SocketRequest.request(host,
-                port, new LookupRequest(key));
+                port, new LookupRequest(name));
 
         Response.throwIfInvalid(resp);
         return resp.stub;
     }
 
     /**
+     * Bind a stub to a name
      *
-     * @param key
-     * @param ref
+     * @param name
+     * @param stub
      */
-    public void rebind(String key, Remote stub) {
-        SocketRequest.request(host, port, new RebindRequest(key, stub));
+    public void rebind(String name, Remote stub) {
+        SocketRequest.request(host, port, new RebindRequest(name, stub));
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return all names on registry server
      */
     public List<String> list() {
         ListResponse resp = (ListResponse) SocketRequest.request(host, port,
                 new ListRequest());
         Response.throwIfInvalid(resp);
-        return resp.keys;
+        return resp.names;
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import rmi.core.Constants;
 import rmi.core.Remote;
 import rmi.message.AuthRequest;
 import rmi.message.AuthResponse;
@@ -20,6 +21,12 @@ import rmi.net.SocketRequestHandler;
 import rmi.net.SocketServer;
 import rmi.registry.exception.StubNotFoundException;
 
+/**
+ * RegistryServer for register stub to name
+ * 
+ * @author Chao
+ *
+ */
 public class RegistryServer {
 
     private static Map<String, Remote> map = new ConcurrentHashMap<String, Remote>();
@@ -30,10 +37,10 @@ public class RegistryServer {
         public Response handle(Request request) {
             LookupRequest req = (LookupRequest) request;
             LookupResponse resp = new LookupResponse();
-            resp.stub = map.get(req.key);
+            resp.stub = map.get(req.name);
             if (resp.stub == null)
                 resp.e = new StubNotFoundException(String.format(
-                        "No stub for %s", req.key));
+                        "No stub for %s", req.name));
             return resp;
         }
 
@@ -44,7 +51,7 @@ public class RegistryServer {
         @Override
         public Response handle(Request request) {
             ListResponse resp = new ListResponse();
-            resp.keys = new ArrayList<String>(map.keySet());
+            resp.names = new ArrayList<String>(map.keySet());
             return resp;
         }
 
@@ -56,7 +63,7 @@ public class RegistryServer {
         public Response handle(Request request) {
             RebindRequest req = (RebindRequest) request;
             RebindResponse resp = new RebindResponse();
-            map.put(req.key, req.stub);
+            map.put(req.name, req.stub);
             return resp;
         }
 
@@ -75,7 +82,7 @@ public class RegistryServer {
 
     public static void main(String[] args) throws IOException {
         try {
-            SocketServer server = SocketServer.getServer(Registry.DEFAULT_PORT);
+            SocketServer server = SocketServer.getServer(Constants.DEFAULT_REGISTRY_PORT);
             server.bindHandler(LookupRequest.TOKEN, LOOKUP_HANDLER);
             server.bindHandler(ListRequest.TOKEN, LIST_HANDLER);
             server.bindHandler(RebindRequest.TOKEN, REBIND_HANDLER);

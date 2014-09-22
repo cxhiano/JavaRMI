@@ -1,7 +1,5 @@
 package test;
 
-import java.io.Serializable;
-
 import org.junit.Assert;
 
 import rmi.registry.LocateRegistry;
@@ -42,13 +40,11 @@ public class TestClient {
             // Test if stub could be successfully passed as arguments
             Assert.assertEquals("Hello Bob ! My name is Alice",
                     alice.sayHello(bob));
-            System.out.println(LocalHello.class.getCanonicalName());
-            // Test if local Remote objects could be successfully passed as arguments
-            Assert.assertEquals("Hello Charlot ! My name is Alice",
-                    alice.sayHello(new LocalHello()));
-            System.out.println(alice.sayHello(new LocalHello()));
 
+            // Calculator instance Calc
             Calculator calc = (Calculator) registry.lookup(TestServer.KEY_CALC);
+            // Make sure we can separate methods with primitive types from
+            // methods with object types
             Assert.assertSame(1, calc.add(0, 1));
             Assert.assertSame(1, calc.add(new Integer(0), new Integer(1))
                     .intValue());
@@ -56,6 +52,7 @@ public class TestClient {
             Assert.assertSame(3, calc.minus(4, 1));
             Assert.assertSame(4, calc.multiply(2, 2));
 
+            // Asynchronous counter
             Counter aCounter = (Counter) registry.lookup(TestServer.KEY_COUNT);
             aCounter.reset();
             Thread t = new BumpThread(aCounter);
@@ -64,9 +61,12 @@ public class TestClient {
             t2.start();
             t.join();
             t2.join();
+            // Consistency is not assured, so the count result should be in
+            // range [COUNT, 2 * COUNT]
             Assert.assertTrue(aCounter.getCount() <= 2 * BumpThread.COUNT);
             Assert.assertTrue(aCounter.getCount() >= BumpThread.COUNT);
 
+            // Synchronous counter
             Counter sCounter = (Counter) registry
                     .lookup(TestServer.KEY_SYNC_COUNT);
             sCounter.reset();
@@ -76,8 +76,11 @@ public class TestClient {
             t2.start();
             t.join();
             t2.join();
+            // Consistency is assured, so the count result should be exactly 2 *
+            // COUNT
             Assert.assertTrue(sCounter.getCount() == 2 * BumpThread.COUNT);
 
+            // Lookup an instance and expect a StubNotFoundException
             Exception e = null;
             try {
                 registry.lookup("Bad");
@@ -93,6 +96,12 @@ public class TestClient {
         }
     }
 
+    /**
+     * Bump a counter 100 times
+     * 
+     * @author Chao
+     *
+     */
     private static class BumpThread extends Thread {
 
         public static final int COUNT = 100;
@@ -109,24 +118,4 @@ public class TestClient {
         }
 
     }
-
-    private static class LocalHello implements Hello, Serializable {
-        @Override
-        public String sayHello() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public String sayHello(Hello hello) {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return "Charlot";
-        }
-
-    }
-
 }

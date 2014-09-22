@@ -1,5 +1,12 @@
 package rmi.message;
 
+/**
+ * 
+ * Response sent from object server to client to return invocation result
+ * 
+ * @author Chao
+ *
+ */
 public class InvokeResponse extends Response {
 
     /**

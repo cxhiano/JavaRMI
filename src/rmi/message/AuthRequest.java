@@ -1,5 +1,13 @@
 package rmi.message;
 
+/**
+ * 
+ * Authentication request sent from client to {@link rmi.registry.RegistryServer} acknowledge
+ * registry server's existence
+ * 
+ * @author Chao
+ *
+ */
 public class AuthRequest extends Request {
 
     /**

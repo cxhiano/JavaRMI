@@ -1,5 +1,12 @@
 package rmi.message;
 
+/**
+ * Response sent back from {@link rmi.registry.RegistryServer} to
+ * {@link rmi.core.RemoteServer} to acknowledge success of rebind request
+ * 
+ * @author Chao
+ *
+ */
 public class RebindResponse extends Response {
 
     /**

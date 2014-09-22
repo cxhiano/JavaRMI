@@ -1,5 +1,11 @@
 package rmi.message;
 
+/**
+ * Request sent from client to object server invoke Remote object methods
+ * 
+ * @author Chao
+ *
+ */
 public class InvokeRequest extends Request {
     private static final long serialVersionUID = 3699709985895743657L;
     public String methodName;

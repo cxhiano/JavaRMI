@@ -2,6 +2,13 @@ package rmi.message;
 
 import rmi.core.Remote;
 
+/**
+ * Request sent from {@link rmi.core.RemoteServer} to
+ * {@link rmi.registry.RegistryServer} to bind stub to give name
+ * 
+ * @author Chao
+ *
+ */
 public class RebindRequest extends Request {
 
     /**
@@ -10,14 +17,14 @@ public class RebindRequest extends Request {
     private static final long serialVersionUID = -836045415455500522L;
     public static final String TOKEN = "Rebind";
 
-    public String key;
+    public String name;
     public Remote stub;
 
     public RebindRequest() {
     }
 
-    public RebindRequest(String key, Remote stub) {
-        this.key = key;
+    public RebindRequest(String name, Remote stub) {
+        this.name = name;
         this.stub = stub;
     }
 

@@ -1,5 +1,12 @@
 package rmi.message;
 
+/**
+ * Authentication response sent back from {@link rmi.registry.RegistryServer} to client to
+ * acknowledge its existence
+ * 
+ * @author Chao
+ *
+ */
 public class AuthResponse extends Response {
 
     /**

@@ -1,5 +1,11 @@
 package rmi.registry.exception;
 
+/**
+ * Exception representing a request is unkown or invalid
+ * 
+ * @author Chao
+ *
+ */
 public class UnknownRequestException extends RuntimeException {
     /**
 	 * 

@@ -1,5 +1,11 @@
 package rmi.message;
 
+/**
+ * Request sent from client to {@link rmi.registry.RegistryServer} list all names
+ * 
+ * @author Chao
+ *
+ */
 public class ListRequest extends Request {
 
     /**

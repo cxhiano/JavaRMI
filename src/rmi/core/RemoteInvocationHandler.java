@@ -39,7 +39,7 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
 
     /**
      * Implement the method in Interface InvocationHandler. Convert the
-     * invocation to a InvokeRequest object and forward it the corresponding
+     * invocation to a {@link InvokeRequest} object and forward it the corresponding
      * host.
      *
      * @param proxy
