@@ -8,10 +8,14 @@ import java.io.ObjectOutputStream;
 import rmi.message.Request;
 import rmi.message.Response;
 
+/**
+ * Contains shorthand for sending request to geiven port on given host
+ *
+ * @author Chao Xin, Chao Zhang
+ */
 public class SocketRequest {
     /**
-     *
-     * Wrapper function for client to send a request at host:port
+     * Send request to port:host
      *
      * @param host
      * @param port
@@ -24,13 +28,14 @@ public class SocketRequest {
         try {
             sock = new Socket(host, port);
 
-            ObjectOutputStream out = new ObjectOutputStream(
-                    sock.getOutputStream());
+            //Setup input/output stream
+            ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 
             out.writeObject(request);
             out.flush();
 
+            //get response object
             Response response = (Response) in.readObject();
 
             return response;
@@ -40,7 +45,7 @@ public class SocketRequest {
             e.printStackTrace();
         } finally {
             try {
-                if (sock != null)
+                if (sock != null)   //close request on exit
                     sock.close();
             } catch (IOException e) {
                 e.printStackTrace();
