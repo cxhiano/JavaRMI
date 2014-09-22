@@ -4,6 +4,13 @@ import rmi.message.AuthRequest;
 import rmi.message.AuthResponse;
 import rmi.net.SocketRequest;
 
+/**
+ * LocateRegistry is used to obtain a reference to a registry object on a 
+ * specific port. Note that a getRegistry call will send AuthRequest
+ * 
+ * @author Chao
+ *
+ */
 public class LocateRegistry {
 
     public static Registry getRegistry() {

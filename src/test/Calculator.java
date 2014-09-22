@@ -2,6 +2,13 @@ package test;
 
 import rmi.core.Remote;
 
+/**
+ * A Calculator interface. Provides four basic operations, for each opeartion,
+ * this interface offers two functions.
+ * 
+ * @author Chao
+ *
+ */
 public interface Calculator extends Remote {
 
     public int add(int a, int b);

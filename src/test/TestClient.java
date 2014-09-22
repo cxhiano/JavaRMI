@@ -10,7 +10,10 @@ public class TestClient {
     public static void main(String args[]) {
 
         try {
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(64015);
+            Assert.assertNull(registry);
+            
+            registry = LocateRegistry.getRegistry();
             Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
             Hello alice = (Hello) registry.lookup(TestServer.KEY_ALICE);
             Hello bob = (Hello) registry.lookup(TestServer.KEY_BOB);
