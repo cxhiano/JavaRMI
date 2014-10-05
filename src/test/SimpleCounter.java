@@ -1,5 +1,7 @@
 package test;
 
+import rmi.core.RemoteException;
+
 /**
  * A asynchronous counter. If called in multiple threads, this counter never
  * assures consistency.
@@ -16,17 +18,17 @@ public class SimpleCounter implements Counter {
     }
 
     @Override
-    public void reset() {
+    public void reset() throws RemoteException {
         count = 0;
     }
 
     @Override
-    public void bump() {
+    public void bump() throws RemoteException {
         ++count;
     }
 
     @Override
-    public Integer getCount() {
+    public Integer getCount() throws RemoteException {
         return count;
     }
 

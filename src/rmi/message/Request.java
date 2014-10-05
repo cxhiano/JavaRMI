@@ -15,6 +15,11 @@ public class Request extends Message {
 
     protected String token = null;
 
+    /**
+     * 
+     * 
+     * @return
+     */
     public String getToken() {
         return token;
     }

@@ -12,17 +12,17 @@ import rmi.core.RemoteException;
 public class HelloImpl implements Hello {
     public String myName;
 
-    public HelloImpl(String name) {
+    public HelloImpl(String name) throws RemoteException {
         myName = name;
     }
 
     @Override
-    public String getName() {
+    public String getName() throws RemoteException{
         return myName;
     }
 
     @Override
-    public String sayHello() {
+    public String sayHello() throws RemoteException {
         return String.format("Hello! My name is %s", myName);
     }
 

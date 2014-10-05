@@ -1,6 +1,7 @@
 package test;
 
 import rmi.core.Remote;
+import rmi.core.RemoteException;
 
 /**
  * A Counter interface. It has two implementation, an asynchronous version and
@@ -11,9 +12,9 @@ import rmi.core.Remote;
  *
  */
 public interface Counter extends Remote {
-    public void reset();
+    public void reset() throws RemoteException;
 
-    public void bump();
+    public void bump() throws RemoteException;
 
-    public Integer getCount();
+    public Integer getCount() throws RemoteException;
 }

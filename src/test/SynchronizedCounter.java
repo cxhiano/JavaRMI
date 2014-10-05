@@ -1,5 +1,7 @@
 package test;
 
+import rmi.core.RemoteException;
+
 /**
  * A synchronous counter. If called in multiple threads, this counter assures
  * consistency.
@@ -16,17 +18,17 @@ public class SynchronizedCounter implements Counter {
     }
 
     @Override
-    public synchronized void reset() {
+    public synchronized void reset() throws RemoteException {
         count = 0;
     }
 
     @Override
-    public synchronized void bump() {
+    public synchronized void bump() throws RemoteException {
         ++count;
     }
 
     @Override
-    public synchronized Integer getCount() {
+    public synchronized Integer getCount() throws RemoteException {
         return count;
     }
 

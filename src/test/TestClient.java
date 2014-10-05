@@ -18,13 +18,10 @@ public class TestClient {
     public static void main(String args[]) {
 
         try {
-            // Try to connect a nonexistent port, should return null
-            Registry registry = LocateRegistry.getRegistry(64015);
-            Assert.assertNull(registry);
 
             // Connect to RegistryServer at default port(15640), should not
             // raise any exceptions
-            registry = LocateRegistry.getRegistry("10.0.0.6");
+            Registry registry = LocateRegistry.getRegistry();
 
             // List all names on RegistryServer
             Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());

@@ -1,6 +1,7 @@
 package test;
 
 import rmi.core.Remote;
+import rmi.core.RemoteException;
 
 /**
  * A Calculator interface. This provides four basic operations, for each
@@ -14,19 +15,19 @@ import rmi.core.Remote;
  */
 public interface Calculator extends Remote {
 
-    public int add(int a, int b);
+    public int add(int a, int b) throws RemoteException;
 
-    public Integer add(Integer a, Integer b);
+    public Integer add(Integer a, Integer b) throws RemoteException;
 
-    public int minus(int a, int b);
+    public int minus(int a, int b) throws RemoteException;
 
-    public Integer minus(Integer a, Integer b);
+    public Integer minus(Integer a, Integer b) throws RemoteException;
 
-    public int multiply(int a, int b);
+    public int multiply(int a, int b) throws RemoteException;
 
-    public Integer multiply(Integer a, Integer b);
+    public Integer multiply(Integer a, Integer b) throws RemoteException;
 
-    public int divide(int a, int b);
+    public int divide(int a, int b) throws RemoteException;
 
-    public Integer divide(Integer a, Integer b);
+    public Integer divide(Integer a, Integer b) throws RemoteException;
 }
