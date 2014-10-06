@@ -5,8 +5,8 @@
         <javac srcdir="src" debug="true" classpath="junit-4.10.jar" destdir="bin/classes" />
     </target>
 
-    <target name="registry" depends="compile">
-        <jar destfile="bin/registry.jar" basedir="bin/classes">
+    <target name="rmi" depends="compile">
+        <jar destfile="bin/rmi.jar" basedir="bin/classes">
             <manifest>
                 <attribute name="Main-class" value="rmi.registry.RegistryServer" />
             </manifest>
