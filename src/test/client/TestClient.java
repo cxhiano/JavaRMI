@@ -9,7 +9,6 @@ import test.base.Calculator;
 import test.base.Constants;
 import test.base.Counter;
 import test.base.Hello;
-import test.server.TestServer;
 
 /**
  * A Test Client. Make sure RegistryServer and TestServer are already launched
@@ -29,7 +28,7 @@ public class TestClient {
             Registry registry = LocateRegistry.getRegistry();
 
             // List all names on RegistryServer
-            Assert.assertArrayEquals(Constants.KEYS, registry.list().toArray());
+            //Assert.assertArrayEquals(Constants.KEYS, registry.list().toArray());
 
             // Lookup Hello instance Alice and Bob
             Hello alice = (Hello) registry.lookup(Constants.KEY_ALICE);

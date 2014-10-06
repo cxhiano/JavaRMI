@@ -15,8 +15,10 @@
 
     <target name="client" depends="compile">
         <jar destfile="bin/client.jar" basedir="bin/classes" excludes="test/server/*">
+            <zipgroupfileset dir="." includes="junit-4.10.jar" />
             <manifest>
                 <attribute name="Main-class" value="test.client.TestClient" />
+                <attribute name="Class-path" value="junit-4.10.jar" />
             </manifest>
         </jar>
     </target>
