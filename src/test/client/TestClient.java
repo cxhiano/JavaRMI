@@ -6,6 +6,7 @@ import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
 import rmi.registry.exception.StubNotFoundException;
 import test.base.Calculator;
+import test.base.Constants;
 import test.base.Counter;
 import test.base.Hello;
 import test.server.TestServer;
@@ -28,12 +29,12 @@ public class TestClient {
             Registry registry = LocateRegistry.getRegistry();
 
             // List all names on RegistryServer
-            Assert.assertArrayEquals(TestServer.KEYS, registry.list().toArray());
+            Assert.assertArrayEquals(Constants.KEYS, registry.list().toArray());
 
             // Lookup Hello instance Alice and Bob
-            Hello alice = (Hello) registry.lookup(TestServer.KEY_ALICE);
+            Hello alice = (Hello) registry.lookup(Constants.KEY_ALICE);
             Assert.assertNotNull(alice);
-            Hello bob = (Hello) registry.lookup(TestServer.KEY_BOB);
+            Hello bob = (Hello) registry.lookup(Constants.KEY_BOB);
             Assert.assertNotNull(bob);
             // Test if stub works correctly
             Assert.assertEquals("Hello! My name is Alice", alice.sayHello());
@@ -43,7 +44,7 @@ public class TestClient {
                     alice.sayHello(bob));
 
             // Calculator instance Calc
-            Calculator calc = (Calculator) registry.lookup(TestServer.KEY_CALC);
+            Calculator calc = (Calculator) registry.lookup(Constants.KEY_CALC);
             // Make sure we can separate methods with primitive types from
             // methods with object types
             Assert.assertSame(1, calc.add(0, 1));
@@ -54,7 +55,7 @@ public class TestClient {
             Assert.assertSame(4, calc.multiply(2, 2));
 
             // Asynchronous counter
-            Counter aCounter = (Counter) registry.lookup(TestServer.KEY_COUNT);
+            Counter aCounter = (Counter) registry.lookup(Constants.KEY_COUNT);
             aCounter.reset();
             Thread t = new BumpThread(aCounter);
             Thread t2 = new BumpThread(aCounter);
@@ -69,7 +70,7 @@ public class TestClient {
 
             // Synchronous counter
             Counter sCounter = (Counter) registry
-                    .lookup(TestServer.KEY_SYNC_COUNT);
+                    .lookup(Constants.KEY_SYNC_COUNT);
             sCounter.reset();
             t = new BumpThread(sCounter);
             t2 = new BumpThread(sCounter);
