@@ -33,7 +33,7 @@ public class RemoteObjectServerHandler extends SocketRequestHandler {
     public RemoteObjectServerHandler(Remote obj, RemoteObjectRef ref) {
         this.obj = obj;
         // Add the object to local object map
-        OBJECTS.put(ref.getKey(), obj);
+        OBJECTS.put(ref.name, obj);
     }
 
     @Override
@@ -68,15 +68,14 @@ public class RemoteObjectServerHandler extends SocketRequestHandler {
                         RemoteInvocationHandler invocationHandler = ((RemoteInvocationHandler) Proxy
                                 .getInvocationHandler(req.args[i]));
                         // Get the unique key of the 'real' object
-                        String key = invocationHandler.getRef().getKey();
+                        String name = invocationHandler.getRef().name;
                         /*
                          * If it's in the map contains all local exported
                          * object, use the local one as parameter
                          */
-                        
 
-                        req.args[i] = OBJECTS.containsKey(key) ? OBJECTS.get(key) 
-                            : req.args[i];
+                        req.args[i] = OBJECTS.containsKey(name) ? OBJECTS
+                                .get(name) : req.args[i];
                     }
                 }
                 // Return result of local invocation

@@ -3,6 +3,8 @@ package rmi.registry;
 import java.util.List;
 
 import rmi.core.Remote;
+import rmi.core.RemoteObjectRef;
+import rmi.core.UnicastRemoteObject;
 import rmi.message.ListRequest;
 import rmi.message.ListResponse;
 import rmi.message.LookupRequest;
@@ -31,13 +33,25 @@ public class Registry {
      * 
      * @param name
      * @return stub corresponding to given name
+     * @throws Exception
      */
-    public Remote lookup(String name) {
+    public Remote lookup(String name) throws Exception {
         LookupResponse resp = (LookupResponse) SocketRequest.request(host,
                 port, new LookupRequest(name));
 
         Response.throwIfInvalid(resp);
-        return resp.stub;
+        return UnicastRemoteObject.toStub(resp.ref);
+    }
+    
+    /**
+     * Bind a stub to a name
+     *
+     * @param name
+     * @param stub
+     */
+    public void rebind(String name, RemoteObjectRef ref) {
+        ref.name = name;
+        rebind(ref);
     }
 
     /**
@@ -46,8 +60,8 @@ public class Registry {
      * @param name
      * @param stub
      */
-    public void rebind(String name, Remote stub) {
-        SocketRequest.request(host, port, new RebindRequest(name, stub));
+    public void rebind(RemoteObjectRef ref) {
+        SocketRequest.request(host, port, new RebindRequest(ref));
     }
 
     /**

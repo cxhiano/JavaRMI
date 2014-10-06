@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rmi.core.Constants;
-import rmi.core.Remote;
+import rmi.core.RemoteObjectRef;
 import rmi.message.AuthRequest;
 import rmi.message.AuthResponse;
 import rmi.message.ListRequest;
@@ -29,7 +29,7 @@ import rmi.registry.exception.StubNotFoundException;
  */
 public class RegistryServer {
 
-    private static Map<String, Remote> map = new ConcurrentHashMap<String, Remote>();
+    private static Map<String, RemoteObjectRef> map = new ConcurrentHashMap<String, RemoteObjectRef>();
 
     private static final SocketRequestHandler LOOKUP_HANDLER = new SocketRequestHandler() {
 
@@ -37,8 +37,8 @@ public class RegistryServer {
         public Response handle(Request request) {
             LookupRequest req = (LookupRequest) request;
             LookupResponse resp = new LookupResponse();
-            resp.stub = map.get(req.name);
-            if (resp.stub == null)
+            resp.ref = map.get(req.name);
+            if (resp.ref == null)
                 resp.e = new StubNotFoundException(String.format(
                         "No stub for %s", req.name));
             return resp;
@@ -63,7 +63,7 @@ public class RegistryServer {
         public Response handle(Request request) {
             RebindRequest req = (RebindRequest) request;
             RebindResponse resp = new RebindResponse();
-            map.put(req.name, req.stub);
+            map.put(req.ref.name, req.ref);
             return resp;
         }
 

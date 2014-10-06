@@ -50,7 +50,7 @@ public class RemoteInvocationHandler implements Serializable, InvocationHandler 
             throws RemoteException {
 
         //Converts the invocation to a InvokeRequest Object
-        InvokeRequest req = new InvokeRequest(ref.getKey(), method.getName(),
+        InvokeRequest req = new InvokeRequest(ref.name, method.getName(),
                 method.getParameterTypes(), args);
 
         //Forward it to corresponding host and get response

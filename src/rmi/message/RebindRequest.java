@@ -1,6 +1,6 @@
 package rmi.message;
 
-import rmi.core.Remote;
+import rmi.core.RemoteObjectRef;
 
 /**
  * Request sent from {@link rmi.core.RemoteServer} to
@@ -17,15 +17,13 @@ public class RebindRequest extends Request {
     private static final long serialVersionUID = -836045415455500522L;
     public static final String TOKEN = "Rebind";
 
-    public String name;
-    public Remote stub;
+    public RemoteObjectRef ref;
 
     public RebindRequest() {
     }
 
-    public RebindRequest(String name, Remote stub) {
-        this.name = name;
-        this.stub = stub;
+    public RebindRequest(RemoteObjectRef ref) {
+        this.ref = ref;
     }
 
     @Override
