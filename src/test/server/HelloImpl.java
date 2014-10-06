@@ -1,6 +1,7 @@
-package test;
+package test.server;
 
 import rmi.core.RemoteException;
+import test.base.Hello;
 
 /**
  * Implementation of Hello Interface. A robust RMI implementation can support

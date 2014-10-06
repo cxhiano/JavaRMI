@@ -1,8 +1,11 @@
-package test;
+package test.server;
 
 import rmi.core.UnicastRemoteObject;
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
+import test.base.Calculator;
+import test.base.Counter;
+import test.base.Hello;
 
 public class TestServer {
     public static final String KEY_BOB = "Bob";

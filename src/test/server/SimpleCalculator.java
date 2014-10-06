@@ -1,6 +1,7 @@
-package test;
+package test.server;
 
 import rmi.core.RemoteException;
+import test.base.Calculator;
 
 /**
  * A simple calculator implementation. This provides four basic operations, for

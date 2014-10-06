@@ -1,6 +1,7 @@
-package test;
+package test.server;
 
 import rmi.core.RemoteException;
+import test.base.Counter;
 
 /**
  * A synchronous counter. If called in multiple threads, this counter assures

@@ -1,4 +1,4 @@
-package test;
+package test.base;
 
 import rmi.core.Remote;
 import rmi.core.RemoteException;

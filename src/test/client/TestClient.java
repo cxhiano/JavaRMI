@@ -1,10 +1,14 @@
-package test;
+package test.client;
 
 import org.junit.Assert;
 
 import rmi.registry.LocateRegistry;
 import rmi.registry.Registry;
 import rmi.registry.exception.StubNotFoundException;
+import test.base.Calculator;
+import test.base.Counter;
+import test.base.Hello;
+import test.server.TestServer;
 
 /**
  * A Test Client. Make sure RegistryServer and TestServer are already launched
@@ -85,7 +89,7 @@ public class TestClient {
                 e = exception;
             }
             Assert.assertTrue(e instanceof StubNotFoundException);
-
+            
             System.out.println("Test OK!");
         } catch (Exception e) {
             e.printStackTrace();
