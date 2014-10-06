@@ -73,7 +73,10 @@ public class RemoteObjectServerHandler extends SocketRequestHandler {
                          * If it's in the map contains all local exported
                          * object, use the local one as parameter
                          */
-                        req.args[i] = OBJECTS.getOrDefault(key, req.args[i]);
+                        
+
+                        req.args[i] = OBJECTS.containsKey(key) ? OBJECTS.get(key) 
+                            : req.args[i];
                     }
                 }
                 // Return result of local invocation
