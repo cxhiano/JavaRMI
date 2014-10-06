@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="JavaRMI" default="compile">
+    <target name="compile">
+        <mkdir dir="bin/classes" />
+        <javac srcdir="src" debug="true" classpath="junit-4.10.jar" destdir="bin/classes" />
+    </target>
+
+    <target name="registry" depends="compile">
+        <jar destfile="bin/registry.jar" basedir="bin/classes">
+            <manifest>
+                <attribute name="Main-class" value="rmi.registry.RegistryServer" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="client" depends="compile">
+        <jar destfile="bin/client.jar" basedir="bin/classes" excludes="test/server/*">
+            <manifest>
+                <attribute name="Main-class" value="test.client.TestClient" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="server" depends="compile">
+        <jar destfile="bin/server.jar" basedir="bin/classes" excludes="test/client/*">
+            <manifest>
+                <attribute name="Main-class" value="test.server.TestServer" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="bin" />
+    </target>
+</project>
